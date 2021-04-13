@@ -53,4 +53,9 @@ public class ClazzServiceImpl implements ClazzService {
         return clazzMapper.findByName(clazzName);
     }
 
+    @Override
+    public int add(Clazz clazz) {
+        return clazzMapper.insert(clazz);
+    }
+
 }

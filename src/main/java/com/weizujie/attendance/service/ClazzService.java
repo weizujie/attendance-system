@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ClazzService {
+
     PageBean<Clazz> queryPage(Map<String, Object> paramMap);
 
     int addClazz(Clazz clazz);
@@ -17,4 +18,5 @@ public interface ClazzService {
 
     Clazz findByName(String clazzName);
 
+    int add(Clazz clazz);
 }

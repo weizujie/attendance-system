@@ -21,13 +21,12 @@ public class ClazzController {
 
     @Autowired
     private ClazzService clazzService;
+
     @Autowired
     private StudentService studentService;
 
     /**
-     * 跳转班级页面
-     *
-     * @return
+     * 跳转专业页面
      */
     @GetMapping("/clazz_list")
     public String clazzList() {
@@ -35,12 +34,7 @@ public class ClazzController {
     }
 
     /**
-     * 异步加载班级列表
-     *
-     * @param page
-     * @param rows
-     * @param clazzName
-     * @return
+     * 异步加载专业列表
      */
     @PostMapping("/getClazzList")
     @ResponseBody
@@ -62,26 +56,17 @@ public class ClazzController {
     }
 
     /**
-     * 添加班级
-     *
-     * @param clazz
-     * @return
+     * 添加专业
      */
     @PostMapping("/addClazz")
     @ResponseBody
     public AjaxResult addClazz(Clazz clazz) {
         AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = clazzService.addClazz(clazz);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("添加成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("添加失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int count = clazzService.add(clazz);
+        if (count > 0) {
+            ajaxResult.setSuccess(true);
+            ajaxResult.setMessage("添加成功");
+        } else {
             ajaxResult.setSuccess(false);
             ajaxResult.setMessage("添加失败");
         }
@@ -89,10 +74,7 @@ public class ClazzController {
     }
 
     /**
-     * 删除班级
-     *
-     * @param data
-     * @return
+     * 删除专业
      */
     @PostMapping("/deleteClazz")
     @ResponseBody
@@ -103,7 +85,7 @@ public class ClazzController {
             for (Long id : ids) {  //判断是否存在课程关联学生
                 if (!studentService.isStudentByClazzId(id)) {
                     ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("无法删除,班级下存在学生");
+                    ajaxResult.setMessage("无法删除,专业下存在学生");
                     return ajaxResult;
                 }
             }
@@ -118,16 +100,13 @@ public class ClazzController {
         } catch (Exception e) {
             e.printStackTrace();
             ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("删除失败,该班级存在老师或学生");
+            ajaxResult.setMessage("删除失败,该专业存在老师或学生");
         }
         return ajaxResult;
     }
 
     /**
-     * 班级修改
-     *
-     * @param clazz
-     * @return
+     * 专业修改
      */
     @PostMapping("/editClazz")
     @ResponseBody

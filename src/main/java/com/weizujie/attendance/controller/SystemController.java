@@ -25,15 +25,15 @@ public class SystemController {
 
     @Autowired
     private AdminService adminService;
+
     @Autowired
     private StudentService studentService;
+
     @Autowired
     private TeacherService teacherService;
 
     /**
      * 跳转登录界面
-     *
-     * @return
      */
     @GetMapping("/login")
     public String login() {
@@ -113,8 +113,6 @@ public class SystemController {
 
     /**
      * 跳转后台主页
-     *
-     * @return
      */
     @GetMapping("/index")
     public String index() {
@@ -123,10 +121,7 @@ public class SystemController {
 
 
     /**
-     * 登出
-     *
-     * @param session
-     * @return
+     * 退出登录
      */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -141,11 +136,6 @@ public class SystemController {
 
     /**
      * 修改密码
-     *
-     * @param password
-     * @param newpassword
-     * @param session
-     * @return
      */
     @PostMapping("/editPassword")
     @Transactional(rollbackFor = Exception.class)
