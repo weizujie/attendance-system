@@ -1,0 +1,17 @@
+server:
+  port: 1000
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/studentmanager?setUnicode=true&characterEncoding=utf8&useAffectedRows=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: toor
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml

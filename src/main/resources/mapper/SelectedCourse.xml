@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizujie.attendance.mapper.SelectedCourseMapper">
+
+    <resultMap type="com.weizujie.attendance.entity.SelectedCourse" id="SelectedCourseInfo">
+        <result column="id" property="id"/>
+        <result column="student_id" property="studentId"/>
+        <result column="course_id" property="courseId"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="SelectedCourseInfo">
+        SELECT *
+        from s_selected_course
+        <where>
+            <if test="studentId!=null">and student_id LIKE concat("%",#{studentId},"%")</if>
+            <if test="courseId!=null">and course_id LIKE concat("%",#{courseId},"%")</if>
+            <if test="studentid!=null">and student_id = #{studentid}</if>
+        </where>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from s_selected_course
+        <where>
+            <if test="studentId!=null">and student_id LIKE concat("%",#{studentId},"%")</if>
+            <if test="courseId!=null">and course_id LIKE concat("%",#{courseId},"%")</if>
+            <if test="studentid!=null">and student_id = #{studentid}</if>
+        </where>
+    </select>
+
+    <insert id="addSelectedCourse" parameterType="com.weizujie.attendance.entity.SelectedCourse">
+        insert into s_selected_course(student_id,course_id)
+        values(#{studentId},#{courseId})
+    </insert>
+
+    <delete id="deleteSelectedCourse" parameterType="int">
+        delete from s_selected_course where id = #{id}
+    </delete>
+
+    <select id="findById" parameterType="int" resultMap="SelectedCourseInfo">
+        select  * from s_selected_course where id = #{id}
+    </select>
+
+
+    <select id="findBySelectedCourse" parameterType="com.weizujie.attendance.entity.SelectedCourse"
+            resultMap="SelectedCourseInfo">
+        select * from s_selected_course
+        where student_id = #{studentId} and course_id = #{courseId}
+    </select>
+
+    <select id="isStudentId" parameterType="int" resultMap="SelectedCourseInfo">
+        select * from s_selected_course
+        where student_id = #{id}
+    </select>
+
+    <select id="getAllBySid" parameterType="long" resultMap="SelectedCourseInfo">
+        select * from s_selected_course
+        where student_id = #{studentid}
+    </select>
+</mapper>

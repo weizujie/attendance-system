@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizujie.attendance.mapper.CourseMapper">
+
+    <resultMap type="com.weizujie.attendance.entity.Course" id="CourseInfo">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="teacher_id" property="teacherId"/>
+        <result column="course_date" property="courseDate"/>
+        <result column="selected_num" property="selectedNum"/>
+        <result column="max_num" property="maxNum"/>
+        <result column="info" property="info"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="CourseInfo">
+        SELECT *
+        from s_course
+        <where>
+            <if test="name!=null">and name LIKE concat("%",#{name},"%")</if>
+            <if test="teacherId!=null">and teacher_id LIKE concat("%",#{teacherId},"%")</if>
+        </where>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from s_course
+        <where>
+            <if test="name!=null">and name LIKE concat("%",#{name},"%")</if>
+            <if test="teacherId!=null">and teacher_id LIKE concat("%",#{teacherId},"%")</if>
+        </where>
+    </select>
+
+    <insert id="addCourse" parameterType="com.weizujie.attendance.entity.Course">
+        insert into s_course(name,teacher_id,course_date,max_num,info)
+        values(#{name},#{teacherId},#{courseDate},#{maxNum},#{info})
+    </insert>
+
+    <delete id="deleteCourse" parameterType="java.util.ArrayList">
+        delete from s_course
+        <where>
+            id in
+            <foreach collection="list" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <update id="editCourse" parameterType="com.weizujie.attendance.entity.Course">
+        update s_course set name = #{name},teacher_id = #{teacherId},course_date = #{courseDate},max_num = #{maxNum},info = #{info} where id = #{id}
+    </update>
+
+    <update id="addStudentNum" parameterType="long">
+         update s_course
+         set selected_num = (case
+            when selected_num = max_num then 50
+            when selected_num &lt; max_num then selected_num+1
+            end
+         )
+         where id = #{courseId}
+    </update>
+
+    <update id="deleteStudentNum" parameterType="long">
+         update s_course
+         set selected_num = selected_num-1
+         where id = #{courseId}
+    </update>
+
+    <select id="getCourseById" parameterType="java.util.List" resultType="com.weizujie.attendance.entity.Course">
+        select *
+        from s_course
+        <where>
+            id in
+            <foreach collection="list" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="findByName" parameterType="java.lang.String" resultType="long">
+        select id from s_course where name = #{name}
+    </select>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizujie.attendance.mapper.LeaveMapper">
+
+    <resultMap type="com.weizujie.attendance.entity.Leave" id="LeaveInfo">
+        <result column="id" property="id"/>
+        <result column="student_id" property="studentId"/>
+        <result column="info" property="info"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="LeaveInfo">
+        SELECT *
+        from s_leave
+        <where>
+            <if test="studentId!=null">and student_id = #{studentId}</if>
+        </where>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from s_leave
+        <where>
+            <if test="studentId!=null">and student_id = #{studentId}</if>
+        </where>
+    </select>
+
+    <insert id="addLeave" parameterType="com.weizujie.attendance.entity.Leave">
+        insert into s_leave(student_id,info)
+        values(#{studentId},#{info})
+    </insert>
+
+    <delete id="deleteLeave" parameterType="long">
+        delete from s_leave where id = #{id}
+    </delete>
+
+    <update id="editLeave" parameterType="com.weizujie.attendance.entity.Leave">
+        update s_leave set student_id = #{studentId},info = #{info} where id = #{id}
+    </update>
+
+    <update id="checkLeave" parameterType="com.weizujie.attendance.entity.Leave">
+        update s_leave set student_id = #{studentId},info = #{info},status = #{status},remark = #{remark} where id = #{id}
+    </update>
+
+</mapper>

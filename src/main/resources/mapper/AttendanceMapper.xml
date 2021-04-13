@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizujie.attendance.mapper.AttendanceMapper">
+
+    <resultMap type="com.weizujie.attendance.entity.Attendance" id="AttendanceInfo">
+        <result column="id" property="id"/>
+        <result column="course_id" property="courseId"/>
+        <result column="student_id" property="studentId"/>
+        <result column="type" property="type"/>
+        <result column="date" property="date"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="AttendanceInfo">
+        SELECT *
+        from s_attendance
+        <where>
+            <if test="courseid!=null">and course_id = #{courseid}</if>
+            <if test="studentid!=null">and student_id = #{studentid}</if>
+            <if test="type!=null">and type = #{type}</if>
+            <if test="date!=null">and date = #{date}</if>
+        </where>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from s_attendance
+        <where>
+            <if test="courseid!=null">and course_id = #{courseid}</if>
+            <if test="studentid!=null">and student_id = #{studentid}</if>
+            <if test="type!=null">and type = #{type}</if>
+            <if test="date!=null">and date = #{date}</if>
+        </where>
+    </select>
+
+    <insert id="addAttendance" parameterType="com.weizujie.attendance.entity.Attendance">
+        insert into s_attendance(course_id,student_id,type,date)
+        values(#{courseId},#{studentId},#{type},#{date})
+    </insert>
+
+    <delete id="deleteAttendance" parameterType="long">
+        delete from s_attendance where id = #{id}
+    </delete>
+
+    <select id="isAttendance" parameterType="com.weizujie.attendance.entity.Attendance"
+            resultType="com.weizujie.attendance.entity.Attendance">
+        select * from s_attendance where course_id = #{courseId} and student_id = #{studentId} and type = #{type} and date = #{date}
+    </select>
+
+
+</mapper>
