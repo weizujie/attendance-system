@@ -2,7 +2,7 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.entity.Leave;
 import com.weizujie.attendance.service.LeaveService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,12 +29,6 @@ public class LeaveController {
 
     /**
      * 异步加载请假列表
-     *
-     * @param page
-     * @param rows
-     * @param studentid
-     * @param from
-     * @return
      */
     @PostMapping("/getLeaveList")
     @ResponseBody
@@ -59,112 +53,58 @@ public class LeaveController {
 
     /**
      * 添加学生请假条
-     *
-     * @param leave
-     * @return
      */
     @PostMapping("/addLeave")
     @ResponseBody
-    public AjaxResult addLeave(Leave leave) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = leaveService.addLeave(leave);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("添加成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("添加失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统异常，请重试");
+    public R addLeave(Leave leave) {
+        int count = leaveService.addLeave(leave);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
     /**
      * 修改请假条
-     *
-     * @param leave
-     * @return
      */
     @PostMapping("/editLeave")
     @ResponseBody
-    public AjaxResult editLeave(Leave leave) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = leaveService.editLeave(leave);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("修改成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统异常，请重试");
+    public R editLeave(Leave leave) {
+        int count = leaveService.editLeave(leave);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
     /**
      * 对假条进行审核
-     *
-     * @param leave
-     * @return
      */
     @PostMapping("/checkLeave")
     @ResponseBody
-    public AjaxResult checkLeave(Leave leave) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = leaveService.checkLeave(leave);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("审批成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("审批失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统异常，请重试");
+    public R checkLeave(Leave leave) {
+        int count = leaveService.checkLeave(leave);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
 
     /**
      * 删除假条
-     *
-     * @param id
-     * @return
      */
     @PostMapping("/deleteLeave")
     @ResponseBody
-    public AjaxResult deleteLeave(Long id) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = leaveService.deleteLeave(id);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("删除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("删除失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统异常，请重试");
+    public R deleteLeave(Long id) {
+        int count = leaveService.deleteLeave(id);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
-
-
 }

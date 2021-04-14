@@ -4,7 +4,7 @@ import com.weizujie.attendance.constants.Constant;
 import com.weizujie.attendance.entity.SelectedCourse;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.SelectedCourseService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,13 +30,6 @@ public class SelectedCourseController {
 
     /**
      * 异步加载选课信息列表
-     *
-     * @param page
-     * @param rows
-     * @param studentid
-     * @param courseid
-     * @param from
-     * @return
      */
     @PostMapping("/getSelectedCourseList")
     @ResponseBody
@@ -68,60 +61,33 @@ public class SelectedCourseController {
 
     /**
      * 学生进行选课
-     *
-     * @param selectedCourse
-     * @return
      */
     @PostMapping("/addSelectedCourse")
     @ResponseBody
-    public AjaxResult addSelectedCourse(SelectedCourse selectedCourse) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = selectedCourseService.addSelectedCourse(selectedCourse);
-            if (count == 1) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("选课成功");
-            } else if (count == 0) {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("选课人数已满");
-            } else if (count == 2) {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("已选择这门课程");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统内部出错，请联系管理员!");
+    public R addSelectedCourse(SelectedCourse selectedCourse) {
+        int count = selectedCourseService.addSelectedCourse(selectedCourse);
+        if (count == 1) {
+            return R.success();
+        } else if (count == 0) {
+            return R.fail("选课人数已满");
+        } else if (count == 2) {
+            return R.fail("已选过这门课程");
         }
-        return ajaxResult;
+        return R.fail("系统繁忙");
     }
 
 
     /**
      * 删除选课信息
-     *
-     * @param id
-     * @return
      */
     @PostMapping("/deleteSelectedCourse")
     @ResponseBody
-    public AjaxResult deleteSelectedCourse(Long id) {
-        AjaxResult ajaxResult = new AjaxResult();
-
-        try {
-            int count = selectedCourseService.deleteSelectedCourse(id);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("移除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("移除失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public R deleteSelectedCourse(Long id) {
+        int count = selectedCourseService.deleteSelectedCourse(id);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
-
-
 }

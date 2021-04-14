@@ -1,5 +1,7 @@
 package com.weizujie.attendance.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.mapper.TeacherMapper;
 import com.weizujie.attendance.service.TeacherService;
@@ -51,8 +53,11 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher findByTeacher(Teacher teacher) {
-        return teacherMapper.findByTeacher(teacher);
+    public Teacher login(LoginDTO loginDTO) {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<Teacher>()
+                .eq(Teacher::getUsername, loginDTO.getUsername())
+                .eq(Teacher::getPassword, loginDTO.getPassword());
+        return teacherMapper.selectOne(wrapper);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.weizujie.attendance.service;
 
+import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.utils.PageBean;
 
@@ -17,7 +18,7 @@ public interface StudentService {
 
     int editStudent(Student student);
 
-    Student findByStudent(Student student);
+    Student login(LoginDTO loginDTO);
 
     boolean isStudentByClazzId(Long next);
 

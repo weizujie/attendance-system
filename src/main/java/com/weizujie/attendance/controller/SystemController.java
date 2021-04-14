@@ -1,23 +1,25 @@
 package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Admin;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.service.AdminService;
 import com.weizujie.attendance.service.StudentService;
 import com.weizujie.attendance.service.TeacherService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.Objects;
+
+import static com.weizujie.attendance.constants.Constant.*;
 
 @Controller
 @RequestMapping("/system")
@@ -41,82 +43,64 @@ public class SystemController {
     }
 
     /**
-     * 登录表单提交 校验
-     *
-     * @return
-     */
-    @PostMapping("/login")
-    @ResponseBody
-    public AjaxResult submitlogin(String username, String password, String type, HttpSession session) {
-        AjaxResult ajaxResult = new AjaxResult();
-        if (StringUtils.isEmpty(username)) {
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("请填写用户名");
-            return ajaxResult;
-        }
-        if (StringUtils.isEmpty(password)) {
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("请填写密码");
-            return ajaxResult;
-        }
-
-        //数据库校验
-        switch (type) {
-            case "1": { //管理员
-                Admin admin = new Admin();
-                admin.setPassword(password);
-                admin.setUsername(username);
-                Admin ad = adminService.findByAdmin(admin);
-                if (StringUtils.isEmpty(ad)) {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("用户名或密码错误");
-                    return ajaxResult;
-                }
-                ajaxResult.setSuccess(true);
-                session.setAttribute(Constant.ADMIN, ad);
-                session.setAttribute(Constant.USER_TYPE, "1");
-                break;
-            }
-            case "2": {
-                Student student = new Student();
-                student.setPassword(password);
-                student.setUsername(username);
-                Student st = studentService.findByStudent(student);
-                if (StringUtils.isEmpty(st)) {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("用户名或密码错误");
-                    return ajaxResult;
-                }
-                ajaxResult.setSuccess(true);
-                session.setAttribute(Constant.STUDENT, st);
-                session.setAttribute(Constant.USER_TYPE, "2");
-                break;
-            }
-            case "3": {
-                Teacher teacher = new Teacher();
-                teacher.setPassword(password);
-                teacher.setUsername(username);
-                Teacher tr = teacherService.findByTeacher(teacher);
-                if (StringUtils.isEmpty(tr)) {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("用户名或密码错误");
-                    return ajaxResult;
-                }
-                ajaxResult.setSuccess(true);
-                session.setAttribute(Constant.TEACHER, tr);
-                session.setAttribute(Constant.USER_TYPE, "3");
-                break;
-            }
-        }
-        return ajaxResult;
-    }
-
-    /**
      * 跳转后台主页
      */
     @GetMapping("/index")
     public String index() {
         return "/system/index";
+    }
+
+    /**
+     * 跳转修改密码页面
+     */
+    @GetMapping("/personalView")
+    public String personalView() {
+        return "/system/personalView";
+    }
+
+    /**
+     * 登录操作
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public R<Boolean> login(LoginDTO loginDTO, HttpSession session) {
+
+        // 空值判断
+        if (StringUtils.isEmpty(loginDTO.getUsername()) || StringUtils.isEmpty(loginDTO.getPassword())) {
+            return R.fail("用户名或密码不能为空");
+        }
+
+        // 用户类型校验
+        switch (loginDTO.getType()) {
+            case ADMIN_CODE: {
+                Admin admin = adminService.login(loginDTO);
+                if (Objects.isNull(admin)) {
+                    return R.fail("用户名或密码错误");
+                }
+                session.setAttribute(Constant.ADMIN, admin);
+                session.setAttribute(Constant.USER_TYPE, ADMIN_CODE);
+                break;
+            }
+            case STUDENT_CODE: {
+                Student student = studentService.login(loginDTO);
+                if (Objects.isNull(student)) {
+                    return R.fail("用户名或密码错误");
+                }
+                session.setAttribute(Constant.STUDENT, student);
+                session.setAttribute(Constant.USER_TYPE, STUDENT_CODE);
+                break;
+            }
+            case TEACHER_CODE: {
+                Teacher teacher = teacherService.login(loginDTO);
+                if (Objects.isNull(teacher)) {
+                    return R.fail("用户名或密码错误");
+                }
+                session.setAttribute(Constant.TEACHER, teacher);
+                session.setAttribute(Constant.USER_TYPE, TEACHER_CODE);
+                break;
+            }
+        }
+        return R.success("登录成功");
     }
 
 
@@ -129,93 +113,64 @@ public class SystemController {
         return "/login";
     }
 
-    @GetMapping("/personalView")
-    public String personalView() {
-        return "/system/personalView";
-    }
-
     /**
      * 修改密码
      */
     @PostMapping("/editPassword")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public AjaxResult editPassword(String password, String newpassword, HttpSession session) {
-        AjaxResult ajaxResult = new AjaxResult();
-        String usertype = (String) session.getAttribute(Constant.USER_TYPE);
-        if (usertype.equals("1")) {
-            //管理员
+    public R<Boolean> editPassword(String password, String newpassword, HttpSession session) {
+
+        // 从 session 中获取用户类型
+        String userType = (String) session.getAttribute(Constant.USER_TYPE);
+        if (Objects.isNull(userType)) {
+            return R.fail("用户类型获取失败");
+        }
+
+        if (ADMIN_CODE.equals(userType)) {
+
+            // 从 session 中获取管理员信息
             Admin admin = (Admin) session.getAttribute(Constant.ADMIN);
             if (!password.equals(admin.getPassword())) {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("原密码错误");
-                return ajaxResult;
+                return R.fail("原密码错误");
             }
             admin.setPassword(newpassword);
-            try {
-                int count = adminService.editPswdByAdmin(admin);
-                if (count > 0) {
-                    ajaxResult.setSuccess(true);
-                    ajaxResult.setMessage("修改成功,请重新登录");
-                } else {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("修改失败");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
+            int count = adminService.editPswdByAdmin(admin);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
             }
         }
-        if (usertype.equals("2")) {
+        if (userType.equals("2")) {
             //学生
             Student student = (Student) session.getAttribute(Constant.STUDENT);
             if (!password.equals(student.getPassword())) {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("原密码错误");
-                return ajaxResult;
+                return R.fail("原密码错误");
             }
             student.setPassword(newpassword);
-            try {
-                int count = studentService.editPswdByStudent(student);
-                if (count > 0) {
-                    ajaxResult.setSuccess(true);
-                    ajaxResult.setMessage("修改成功,请重新登录");
-                } else {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("修改失败");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
+            int count = studentService.editPswdByStudent(student);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
             }
         }
-        if (usertype.equals("3")) {
+        if (userType.equals("3")) {
             //教师
             Teacher teacher = (Teacher) session.getAttribute(Constant.TEACHER);
             if (!password.equals(teacher.getPassword())) {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("原密码错误");
-                return ajaxResult;
+                return R.fail("原密码错误");
             }
             teacher.setPassword(newpassword);
-            try {
-                int count = teacherService.editPswdByTeacher(teacher);
-                if (count > 0) {
-                    ajaxResult.setSuccess(true);
-                    ajaxResult.setMessage("修改成功,请重新登录");
-                } else {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("修改失败");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
+            int count = teacherService.editPswdByTeacher(teacher);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
             }
         }
-        return ajaxResult;
+        return R.success();
     }
 
 }

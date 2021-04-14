@@ -1,16 +1,15 @@
 package com.weizujie.attendance.controller;
 
+import com.weizujie.attendance.constants.Constant;
 import com.weizujie.attendance.entity.Attendance;
-import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.entity.SelectedCourse;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.AttendanceService;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.service.SelectedCourseService;
-import com.weizujie.attendance.utils.AjaxResult;
-import com.weizujie.attendance.constants.Constant;
 import com.weizujie.attendance.utils.DateFormatUtil;
 import com.weizujie.attendance.utils.PageBean;
+import com.weizujie.attendance.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -40,16 +39,6 @@ public class AttendanceController {
 
     /**
      * 异步获取考勤列表数据
-     *
-     * @param page
-     * @param rows
-     * @param studentid
-     * @param courseid
-     * @param type
-     * @param date
-     * @param from
-     * @param session
-     * @return
      */
     @RequestMapping("/getAttendanceList")
     @ResponseBody
@@ -84,10 +73,7 @@ public class AttendanceController {
     }
 
     /**
-     * 通过 选课信息中的课程id 查询 学生所选择的课程
-     *
-     * @param studentid
-     * @return
+     * 通过选课中的课程id查询学生所选择的课程
      */
     @RequestMapping("/getStudentSelectedCourseList")
     @ResponseBody
@@ -99,67 +85,42 @@ public class AttendanceController {
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());
         }
-        List<Course> courseList = courseService.getCourseById(ids);
-        return courseList;
+        return courseService.getCourseById(ids);
     }
 
 
     /**
      * 添加考勤签到
-     *
-     * @param attendance
-     * @return
      */
     @PostMapping("/addAttendance")
     @ResponseBody
-    public AjaxResult addAttendance(Attendance attendance) {
-        AjaxResult ajaxResult = new AjaxResult();
+    public R addAttendance(Attendance attendance) {
         attendance.setDate(DateFormatUtil.getFormatDate(new Date(), "yyyy-MM-dd"));
-        //判断是否已签到
+        // 判断是否已签到
         if (attendanceService.isAttendance(attendance)) {
-            //true为已签到
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("已签到，请勿重复签到！");
+            // true为已签到
+            return R.success("已签到，请勿重复签到");
         } else {
             int count = attendanceService.addAttendance(attendance);
             if (count > 0) {
-                //签到成功
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("签到成功");
+                return R.success();
             } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("系统错误，请重新签到");
+                return R.fail();
             }
         }
-        return ajaxResult;
     }
 
     /**
      * 删除考勤签到
-     *
-     * @param id
-     * @return
      */
     @PostMapping("/deleteAttendance")
     @ResponseBody
-    public AjaxResult deleteAttendance(Long id) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = attendanceService.deleteAttendance(id);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("删除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("删除失败");
-            }
-        } catch (Exception e) {
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("系统异常,请重试");
-            e.printStackTrace();
+    public R deleteAttendance(Long id) {
+        int count = attendanceService.deleteAttendance(id);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
-
-
 }

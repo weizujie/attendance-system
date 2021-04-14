@@ -1,5 +1,7 @@
 package com.weizujie.attendance.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.mapper.StudentMapper;
 import com.weizujie.attendance.service.StudentService;
@@ -18,10 +20,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public PageBean<Student> queryPage(Map<String, Object> paramMap) {
-        PageBean<Student> pageBean = new PageBean<>((Integer) paramMap.get("pageno"),(Integer) paramMap.get("pagesize"));
+        PageBean<Student> pageBean = new PageBean<>((Integer) paramMap.get("pageno"), (Integer) paramMap.get("pagesize"));
 
         Integer startIndex = pageBean.getStartIndex();
-        paramMap.put("startIndex",startIndex);
+        paramMap.put("startIndex", startIndex);
         List<Student> datas = studentMapper.queryList(paramMap);
         pageBean.setDatas(datas);
 
@@ -37,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int addStudent(Student student) {
-        return studentMapper.addStudent(student);
+        return studentMapper.insert(student);
     }
 
     @Override
@@ -51,16 +53,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findByStudent(Student student) {
-        return studentMapper.findByStudent(student);
+    public Student login(LoginDTO loginDTO) {
+        LambdaQueryWrapper<Student> wrapper = new LambdaQueryWrapper<Student>()
+                .eq(Student::getUsername, loginDTO.getUsername())
+                .eq(Student::getPassword, loginDTO.getPassword());
+        return studentMapper.selectOne(wrapper);
     }
 
     @Override
     public boolean isStudentByClazzId(Long id) {
         List<Student> studentList = studentMapper.isStudentByClazzId(id);
-        if (studentList.isEmpty()){
+        if (studentList.isEmpty()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

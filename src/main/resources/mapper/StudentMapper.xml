@@ -4,7 +4,6 @@
 
     <resultMap type="com.weizujie.attendance.entity.Student" id="StudentInfo">
         <result column="id" property="id"/>
-        <result column="sn" property="sn"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="clazz_id" property="clazzId"/>
@@ -33,8 +32,8 @@
     </select>
 
     <insert id="addStudent" parameterType="com.weizujie.attendance.entity.Student">
-        insert into s_student(sn,username,password,clazz_id,sex,mobile)
-        values(#{sn},#{username},#{password},#{clazzId},#{sex},#{mobile})
+        insert into s_student(username,password,clazz_id,sex,mobile)
+        values(#{username},#{password},#{clazzId},#{sex},#{mobile})
     </insert>
 
     <delete id="deleteStudent" parameterType="java.util.ArrayList">
