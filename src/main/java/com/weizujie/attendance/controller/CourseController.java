@@ -2,7 +2,7 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.service.CourseService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.Data;
 import com.weizujie.attendance.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,6 @@ public class CourseController {
 
     /**
      * 异步加载课程信息列表
-     *
-     * @param page
-     * @param rows
-     * @param name
-     * @param teacherid
-     * @param from
-     * @return
      */
     @PostMapping("/getCourseList")
     @ResponseBody
@@ -59,78 +52,42 @@ public class CourseController {
 
     /**
      * 添加课程信息
-     *
-     * @param course
-     * @return
      */
     @PostMapping("/addCourse")
     @ResponseBody
-    public AjaxResult addCourse(Course course) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = courseService.addCourse(course);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("添加成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("添加失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("添加失败");
+    public R addCourse(Course course) {
+        int count = courseService.addCourse(course);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
 
     /**
      * 修改课程信息
-     *
-     * @param course
-     * @return
      */
     @PostMapping("/editCourse")
     @ResponseBody
-    public AjaxResult editCourse(Course course) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = courseService.editCourse(course);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("修改成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("修改失败");
+    public R editCourse(Course course) {
+        int count = courseService.editCourse(course);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
 
     @PostMapping("/deleteCourse")
     @ResponseBody
-    public AjaxResult deleteCourse(Data data) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = courseService.deleteCourse(data.getIds());
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("删除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("删除失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("删除失败,该班级存在老师或学生");
+    public R deleteCourse(Data data) {
+        int count = courseService.deleteCourse(data.getIds());
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 }

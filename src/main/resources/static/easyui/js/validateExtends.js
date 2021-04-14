@@ -95,7 +95,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 	    message: '年级名称已存在'
 	},
 	
-	//验证班级不能重复
+	//验证专业不能重复
 	repeat_clazz: {
 		validator: function (value, param) {
 			var gradeid = $(param[0]).combobox("getValue");
@@ -117,7 +117,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 			});
 			return flag;
 	    },
-	    message: '该年级下已存在同名班级'
+	    message: '该年级下已存在同名专业'
 	},
 	
 	//验证两个值是否相同

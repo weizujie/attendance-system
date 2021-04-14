@@ -3,7 +3,7 @@ package com.weizujie.attendance.controller;
 import com.weizujie.attendance.constants.Constant;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.service.TeacherService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.Data;
 import com.weizujie.attendance.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +37,6 @@ public class TeacherController {
 
     /**
      * 异步加载老师数据列表
-     *
-     * @param page
-     * @param rows
-     * @param teacherName
-     * @param clazzid
-     * @param from
-     * @param session
-     * @return
      */
     @PostMapping("/getTeacherList")
     @ResponseBody
@@ -78,85 +70,40 @@ public class TeacherController {
 
     /**
      * 删除教师
-     *
-     * @param data
-     * @return
      */
     @PostMapping("/deleteTeacher")
     @ResponseBody
-    public AjaxResult deleteTeacher(Data data) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = teacherService.deleteTeacher(data.getIds());
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("删除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("删除失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("删除失败");
+    public R deleteTeacher(Data data) {
+        int count = teacherService.deleteTeacher(data.getIds());
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 
     /**
      * 添加教师
-     *
-     * @param files
-     * @param teacher
-     * @return
-     * @throws IOException
      */
     @RequestMapping("/addTeacher")
     @ResponseBody
-    public AjaxResult addTeacher(@RequestParam("file") MultipartFile[] files, Teacher teacher) throws IOException {
-
-        AjaxResult ajaxResult = new AjaxResult();
-        // TODO: 工号
-
-        //保存学生信息到数据库
-        try {
-            int count = teacherService.addTeacher(teacher);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("保存成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("保存失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("保存失败");
+    public R addTeacher(Teacher teacher) {
+        int count = teacherService.addTeacher(teacher);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-
-        ajaxResult.setSuccess(true);
-        return ajaxResult;
     }
 
     @PostMapping("/editTeacher")
     @ResponseBody
-    public AjaxResult editTeacher(@RequestParam("file") MultipartFile[] files, Teacher teacher) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = teacherService.editTeacher(teacher);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("修改成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("修改失败");
+    public R editTeacher(Teacher teacher) {
+        int count = teacherService.editTeacher(teacher);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
-
 }

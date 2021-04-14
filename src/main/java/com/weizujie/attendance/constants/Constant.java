@@ -1,14 +1,20 @@
 package com.weizujie.attendance.constants;
 
-public class Constant {
+public interface Constant {
 
 
-    public static final String ADMIN = "admin";
+    String ADMIN = "admin";
 
-    public static final String STUDENT = "student";
+    String STUDENT = "student";
 
-    public static final String TEACHER = "teacher";
+    String TEACHER = "teacher";
 
-    public static final String USER_TYPE = "usertype";
+    String USER_TYPE = "usertype";
+
+    String ADMIN_CODE = "1";
+
+    String STUDENT_CODE = "2";
+
+    String TEACHER_CODE = "3";
 
 }

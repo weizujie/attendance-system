@@ -3,7 +3,7 @@ package com.weizujie.attendance.controller;
 import com.weizujie.attendance.entity.Clazz;
 import com.weizujie.attendance.service.ClazzService;
 import com.weizujie.attendance.service.StudentService;
-import com.weizujie.attendance.utils.AjaxResult;
+import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.Data;
 import com.weizujie.attendance.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,17 +60,13 @@ public class ClazzController {
      */
     @PostMapping("/addClazz")
     @ResponseBody
-    public AjaxResult addClazz(Clazz clazz) {
-        AjaxResult ajaxResult = new AjaxResult();
+    public R addClazz(Clazz clazz) {
         int count = clazzService.add(clazz);
         if (count > 0) {
-            ajaxResult.setSuccess(true);
-            ajaxResult.setMessage("添加成功");
+            return R.success();
         } else {
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("添加失败");
+            return R.fail();
         }
-        return ajaxResult;
     }
 
     /**
@@ -78,31 +74,19 @@ public class ClazzController {
      */
     @PostMapping("/deleteClazz")
     @ResponseBody
-    public AjaxResult deleteClazz(Data data) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            List<Long> ids = data.getIds();
-            for (Long id : ids) {  //判断是否存在课程关联学生
-                if (!studentService.isStudentByClazzId(id)) {
-                    ajaxResult.setSuccess(false);
-                    ajaxResult.setMessage("无法删除,专业下存在学生");
-                    return ajaxResult;
-                }
+    public R deleteClazz(Data data) {
+        List<Long> ids = data.getIds();
+        for (Long id : ids) {  //判断是否存在课程关联学生
+            if (!studentService.isStudentByClazzId(id)) {
+                return R.fail("无法删除，专业下存在学生");
             }
-            int count = clazzService.deleteClazz(data.getIds());
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("删除成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("删除失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("删除失败,该专业存在老师或学生");
         }
-        return ajaxResult;
+        int count = clazzService.deleteClazz(data.getIds());
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
+        }
     }
 
     /**
@@ -110,22 +94,12 @@ public class ClazzController {
      */
     @PostMapping("/editClazz")
     @ResponseBody
-    public AjaxResult editClazz(Clazz clazz) {
-        AjaxResult ajaxResult = new AjaxResult();
-        try {
-            int count = clazzService.editClazz(clazz);
-            if (count > 0) {
-                ajaxResult.setSuccess(true);
-                ajaxResult.setMessage("修改成功");
-            } else {
-                ajaxResult.setSuccess(false);
-                ajaxResult.setMessage("修改失败");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ajaxResult.setSuccess(false);
-            ajaxResult.setMessage("修改失败");
+    public R editClazz(Clazz clazz) {
+        int count = clazzService.editClazz(clazz);
+        if (count > 0) {
+            return R.success();
+        } else {
+            return R.fail();
         }
-        return ajaxResult;
     }
 }

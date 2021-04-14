@@ -1,5 +1,6 @@
 package com.weizujie.attendance.service;
 
+import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.utils.PageBean;
 
@@ -17,7 +18,7 @@ public interface TeacherService {
 
     int editTeacher(Teacher teacher);
 
-    Teacher findByTeacher(Teacher teacher);
+    Teacher login(LoginDTO loginDTO);
 
     int editPswdByTeacher(Teacher teacher);
 }

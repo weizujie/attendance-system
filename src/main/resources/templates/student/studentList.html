@@ -32,8 +32,7 @@
 						[
 					{field:'chk',checkbox: true,width:50},
 					{field:'id',title:'ID',width:50, sortable: true},
-					{field:'sn',title:'学号',width:200, sortable: true},
-					{field:'username',title:'姓名',width:200},
+					{field:'username',title:'学号',width:200},
 					{field:'sex',title:'性别',width:100},
 					{field:'mobile',title:'电话',width:150},
 					{field:'clazz_id',title:'专业',width:150,
@@ -117,24 +116,6 @@
 					});
 				}
 			});
-
-
-			//专业下拉框
-			/*$("#clazzList").combobox({
-                width: "150",
-                height: "25",
-                valueField: "id",
-                textField: "name",
-                multiple: false, //可多选
-                editable: false, //不可编辑
-                method: "post",
-                url: "ClazzServlet?method=getClazzList&t="+new Date().getTime()+"&from=combox",
-                onChange: function(newValue, oldValue){
-                    //加载专业下的学生
-                    $('#dataList').datagrid("options").queryParams = {clazzid: newValue};
-                    $('#dataList').datagrid("reload");
-                }
-            });*/
 
 			function preLoadClazz(){
 				$("#clazzList").combobox({
@@ -347,10 +328,8 @@
 							$("#edit_name").textbox('setValue', selectRow.username);
 							$("#edit_sex").textbox('setValue', selectRow.sex);
 							$("#edit_mobile").textbox('setValue', selectRow.mobile);
-
 							var div = document.createElement("div"),
 									img1 = document.createElement("img");
-							//div.className = "pic";
 							img1.src=img;
 							$(img1).css("width","200px");
 							$(img1).css("hight","200px");
