@@ -16,6 +16,4 @@ public interface CourseService {
     int deleteCourse(List<Long> ids);
 
     List<Course> getCourseById(List<Long> ids);
-
-    long findByName(String name);
 }

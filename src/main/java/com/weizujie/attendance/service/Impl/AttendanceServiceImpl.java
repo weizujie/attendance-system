@@ -18,10 +18,10 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public PageBean<Attendance> queryPage(Map<String, Object> paramMap) {
-        PageBean<Attendance> pageBean = new PageBean<>((Integer) paramMap.get("pageno"),(Integer) paramMap.get("pagesize"));
+        PageBean<Attendance> pageBean = new PageBean<>((Integer) paramMap.get("pageno"), (Integer) paramMap.get("pagesize"));
 
         Integer startIndex = pageBean.getStartIndex();
-        paramMap.put("startIndex",startIndex);
+        paramMap.put("startIndex", startIndex);
         List<Attendance> datas = attendanceMapper.queryList(paramMap);
         pageBean.setDatas(datas);
 
@@ -33,20 +33,17 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public boolean isAttendance(Attendance attendance) {
         Attendance at = attendanceMapper.isAttendance(attendance);
-        if(at != null){
-            return true;
-        }else{
-            return false;
-        }
+        return at != null;
     }
 
     @Override
     public int addAttendance(Attendance attendance) {
-        return attendanceMapper.addAttendance(attendance);
+        return attendanceMapper.insert(attendance);
+        // return attendanceMapper.addAttendance(attendance);
     }
 
     @Override
     public int deleteAttendance(Long id) {
-        return attendanceMapper.deleteAttendance(id);
+        return attendanceMapper.deleteById(id);
     }
 }

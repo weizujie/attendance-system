@@ -25,10 +25,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public int editPswdByAdmin(Admin admin) {
-        LambdaUpdateWrapper<Admin> wrapper = new LambdaUpdateWrapper<Admin>()
-                .set(Admin::getPassword, admin.getPassword())
-                .in(Admin::getId, admin.getId());
-        return adminMapper.update(admin, wrapper);
+        return adminMapper.updateById(admin);
     }
 
 }

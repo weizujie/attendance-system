@@ -14,8 +14,6 @@ public interface StudentService {
 
     int addStudent(Student student);
 
-    Student findById(Long sid);
-
     int editStudent(Student student);
 
     Student login(LoginDTO loginDTO);
@@ -24,5 +22,5 @@ public interface StudentService {
 
     int editPswdByStudent(Student student);
 
-    int findByName(String username);
+    int updateById(Student student);
 }

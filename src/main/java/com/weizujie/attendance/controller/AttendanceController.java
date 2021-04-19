@@ -36,7 +36,6 @@ public class AttendanceController {
         return "/attendance/attendanceList";
     }
 
-
     /**
      * 异步获取考勤列表数据
      */
@@ -47,25 +46,34 @@ public class AttendanceController {
                                     @RequestParam(value = "studentid", defaultValue = "0") String studentid,
                                     @RequestParam(value = "courseid", defaultValue = "0") String courseid,
                                     String type, String date, String from, HttpSession session) {
-        Map<String, Object> paramMap = new HashMap();
+
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!studentid.equals("0")) paramMap.put("studentid", studentid);
-        if (!courseid.equals("0")) paramMap.put("courseid", courseid);
-        if (!StringUtils.isEmpty(type)) paramMap.put("type", type);
-        if (!StringUtils.isEmpty(date)) paramMap.put("date", date);
+        if (!studentid.equals("0")) {
+            paramMap.put("studentid", studentid);
+        }
+        if (!courseid.equals("0")) {
+            paramMap.put("courseid", courseid);
+        }
+        if (!StringUtils.isEmpty(type)) {
+            paramMap.put("type", type);
+        }
+        if (!StringUtils.isEmpty(date)) {
+            paramMap.put("date", date);
+        }
 
-        //判断是老师还是学生权限
         Student student = (Student) session.getAttribute(Constant.STUDENT);
         if (!StringUtils.isEmpty(student)) {
-            //是学生权限，只能查询自己的信息
+            // 学生用户，只能查询自己的信息
             paramMap.put("studentid", student.getId());
         }
+
         PageBean<Attendance> pageBean = attendanceService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && from.equals("combox")) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
@@ -78,9 +86,9 @@ public class AttendanceController {
     @RequestMapping("/getStudentSelectedCourseList")
     @ResponseBody
     public Object getStudentSelectedCourseList(@RequestParam(value = "studentid", defaultValue = "0") String studentid) {
-        //通过学生id 查询 选课信息
+        // 通过学生id查询选课信息
         List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Long.valueOf(studentid));
-        //通过 选课信息中的课程id 查询 学生所选择的课程
+        // 通过选课中的课程id查询学生所选择的课程
         List<Long> ids = new ArrayList<>();
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());

@@ -62,6 +62,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int editPswdByTeacher(Teacher teacher) {
-        return teacherMapper.editPswdByTeacher(teacher);
+        return teacherMapper.updateById(teacher);
     }
 }

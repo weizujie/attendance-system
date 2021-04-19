@@ -49,13 +49,13 @@
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url: [[@{/system/editPassword}]],
+                                    url:/*[[@{/system/editPassword}]]*/,
                                     data: $("#editPassword").serialize(),
                                     success: function(data){
                                         if(data.success){
                                             $.messager.alert("消息提醒",data.message,"info")
                                             setTimeout(function(){
-                                                top.location.href = [[@{/system/logout}]];
+                                                top.location.href =/*[[@{/system/logout}]]*/;
                                             }, 1000);
                                         }else{
                                             $.messager.alert("消息提醒",data.message,"error")
@@ -132,7 +132,7 @@
             <tr>
                 <td>新密码:</td>
                 <td>
-                    <input id="new_password" style="width: 200px; height: 30px;" class="easyui-textbox" type="password" validType="password" name="newpassword" data-options="required:true, missingMessage:'请输入新密码'" />
+                    <input id="new_password" style="width: 200px; height: 30px;" class="easyui-textbox" type="password" validType="password" name="newPassword" data-options="required:true, missingMessage:'请输入新密码'" />
                 </td>
             </tr>
             <tr>

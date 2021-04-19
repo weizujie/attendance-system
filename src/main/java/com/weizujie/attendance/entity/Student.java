@@ -13,12 +13,26 @@ import java.util.Date;
 @TableName("s_student")
 public class Student {
 
+    /**
+     * 学生id
+     */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    private String username;
+    /**
+     * 学号
+     */
+    private Integer username;
 
+    /**
+     * 密码
+     */
     private String password;
+
+    /**
+     * 姓名
+     */
+    private String nickName;
 
     private Long clazzId;
 

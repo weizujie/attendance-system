@@ -6,9 +6,11 @@
         <result column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
+        <result column="nick_name" property="nickName"/>
         <result column="clazz_id" property="clazzId"/>
         <result column="sex" property="sex"/>
         <result column="mobile" property="mobile"/>
+        <result column="create_date" property="createDate"/>
     </resultMap>
 
     <select id="queryList" resultMap="StudentInfo">
@@ -49,8 +51,8 @@
     <update id="editStudent" parameterType="com.weizujie.attendance.entity.Student">
         update s_student
         <set>
-            <if test="username != null">
-                username = #{username},
+            <if test="nickName != null">
+                nick_name = #{nickName},
             </if>
             <if test="clazzId != null">
                 clazz_id = #{clazzId},
