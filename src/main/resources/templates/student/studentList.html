@@ -20,7 +20,7 @@
 				collapsible:false,//是否可折叠的
 				fit: true,//自动大小
 				method: "post",
-				url:/*[[@{/student/getStudentList}]]*/,
+				url: "getStudentList",
 				idField:'id',
 				singleSelect:false,//是否单选
 				pagination:true,//分页控件
@@ -35,7 +35,7 @@
 					{field:'username',title:'学号',width:150},
 					{field:'nickName',title:'姓名',width:150},
 					{field:'sex',title:'性别',width:100},
-					{field:'mobile',title:'电话',width:150},
+					{field:'mobile',title:'联系方式',width:150},
 					{field:'clazz_id',title:'专业',width:150,
 						formatter: function(value,row,index){
 							if (row.clazzId){
@@ -62,12 +62,12 @@
 					}
 				}
 			});
-			//设置分页控件
+			// 设置分页控件
 			var p = $('#dataList').datagrid('getPager');
 			$(p).pagination({
-				pageSize: 10,//每页显示的记录条数，默认为10
-				pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
-				beforePageText: '第',//页数文本框前显示的汉字
+				pageSize: 10,
+				pageList: [10,20,30,50,100],
+				beforePageText: '第',
 				afterPageText: '页    共 {pages} 页',
 				displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
 			});
@@ -77,7 +77,7 @@
 				$("#addDialog").dialog("open");
 			});
 
-			// 修改
+			// 修改按钮
 			$("#edit").click(function(){
 				var selectRows = $("#dataList").datagrid("getSelections");
 				if(selectRows.length !== 1){
@@ -87,7 +87,7 @@
 				}
 			});
 
-			// 删除
+			// 删除按钮
 			$("#delete").click(function(){
 				var selectRows = $("#dataList").datagrid("getSelections");
 				var selectLength = selectRows.length;
@@ -102,7 +102,7 @@
 						if(r){
 							$.ajax({
 								type: "post",
-								url:/*[[@{/student/deleteStudent}]]*/,
+								url: "deleteStudent",
 								data:jsonObj,
 								success: function(data){
 									if(data.success){
@@ -126,10 +126,10 @@
 					height: "25",
 					valueField: "id",
 					textField: "name",
-					multiple: false, //可多选
-					editable: false, //不可编辑
+					multiple: false,
+					editable: false,
 					method: "post",
-					url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+					url: "/clazz/getClazzList?from=combox",
 					onChange: function(newValue, oldValue){
 					}
 				});
@@ -141,14 +141,13 @@
 				height: "30",
 				valueField: "id",
 				textField: "name",
-				multiple: false, //可多选
-				editable: false, //不可编辑
+				multiple: false,
+				editable: false,
 				method: "post",
 			});
 
-
 			$("#add_clazzList").combobox({
-				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
 					//默认选择第一条数据
 					var data = $(this).combobox("getData");;
@@ -156,12 +155,10 @@
 				}
 			});
 
-
-
 			$("#edit_clazzList").combobox({
-				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
-					//默认选择第一条数据
+					// 默认选择第一条数据
 					var data = $(this).combobox("getData");
 					$(this).combobox("setValue", data[0].id);
 				}
@@ -193,7 +190,7 @@
 								var formData = new FormData($( "#addForm" )[0]);
 								$.ajax({
 									type: "post",
-									url:/*[[@{/student/addStudent}]]*/,
+									url: "addStudent",
 									data: formData,
 									async: false,
 									cache: false,
@@ -204,11 +201,13 @@
 											$.messager.alert("消息提醒",data.message,"info");
 											// 关闭窗口
 											$("#addDialog").dialog("close");
+
 											// 清空原表格数据
 											$("#add_number").textbox('setValue', "");
 											$("#add_name").textbox('setValue', "");
 											$("#add_sex").textbox('setValue', "男");
 											$("#add_phone").textbox('setValue', "");
+
 											//重新刷新页面数据
 											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
 											$('#dataList').datagrid("reload");
@@ -232,6 +231,7 @@
 							$("#add_number").textbox('setValue', "");
 							$("#add_name").textbox('setValue', "");
 							$("#add_phone").textbox('setValue', "");
+
 							// 重新加载专业
 							$("#add_gradeList").combobox("clear");
 							$("#add_gradeList").combobox("reload");
@@ -266,7 +266,7 @@
 								var formData = new FormData($('#editForm')[0]);
 								$.ajax({
 									type: "put",
-									url:/*[[@{/student/editStudent}]]*/,
+									url: "editStudent",
 									data: formData,
 									async: false,
 									cache: false,
@@ -277,6 +277,7 @@
 											$.messager.alert("消息提醒",data.message,"info");
 											// 关闭窗口
 											$("#editDialog").dialog("close");
+
 											// 刷新表格
 											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
 											$("#dataList").datagrid("reload");
@@ -298,10 +299,10 @@
 						iconCls:'icon-reload',
 						handler:function(){
 							// 清空表单
-							$("#imgd div").remove();
 							$("#edit_name").textbox('setValue', "");
 							$("#edit_sex").textbox('setValue', "男");
 							$("#edit_phone").textbox('setValue', "");
+
 							$("#edit_gradeList").combobox("clear");
 							$("#edit_gradeList").combobox("reload");
 						}
@@ -320,6 +321,7 @@
 					}, 100);
 				}
 			});
+
 			//搜索按钮监听事件
 			$("#search-btn").click(function(){
 				$('#dataList').datagrid('load',{
@@ -328,7 +330,6 @@
 				});
 			});
 		});
-		/*]]>*/
 	</script>
 </head>
 <body>
@@ -339,7 +340,7 @@
 <!-- 工具栏 -->
 <div id="toolbar">
 	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;">
-			<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+		<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
 	</div>
 	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
 	<div style="float: left;">
@@ -382,7 +383,7 @@
 				<td><select id="add_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
 			</tr>
 			<tr>
-				<td>电话:</td>
+				<td>联系方式:</td>
 				<td><input id="add_phone" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
 			</tr>
 			<tr>
@@ -407,7 +408,7 @@
 				<td><select id="edit_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
 			</tr>
 			<tr>
-				<td>电话:</td>
+				<td>联系方式:</td>
 				<td><input id="edit_mobile" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
 			</tr>
 			<tr>

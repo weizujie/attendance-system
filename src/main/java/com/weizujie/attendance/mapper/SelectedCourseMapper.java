@@ -15,11 +15,11 @@ public interface SelectedCourseMapper extends BaseMapper<SelectedCourse> {
 
     SelectedCourse findBySelectedCourse(SelectedCourse selectedCourse);
 
-    SelectedCourse findById(Long id);
+    SelectedCourse findById(Integer id);
 
-    int deleteSelectedCourse(Long id);
+    int deleteSelectedCourse(Integer id);
 
-    List<SelectedCourse> isStudentId(Long id);
+    List<SelectedCourse> isStudentId(Integer id);
 
-    List<SelectedCourse> getAllBySid(Long studentid);
+    List<SelectedCourse> getAllBySid(Integer studentid);
 }

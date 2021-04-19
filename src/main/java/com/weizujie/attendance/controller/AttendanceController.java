@@ -87,9 +87,9 @@ public class AttendanceController {
     @ResponseBody
     public Object getStudentSelectedCourseList(@RequestParam(value = "studentid", defaultValue = "0") String studentid) {
         // 通过学生id查询选课信息
-        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Long.valueOf(studentid));
+        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Integer.valueOf(studentid));
         // 通过选课中的课程id查询学生所选择的课程
-        List<Long> ids = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());
         }
@@ -123,7 +123,7 @@ public class AttendanceController {
      */
     @PostMapping("/deleteAttendance")
     @ResponseBody
-    public R deleteAttendance(Long id) {
+    public R deleteAttendance(Integer id) {
         int count = attendanceService.deleteAttendance(id);
         if (count > 0) {
             return R.success();

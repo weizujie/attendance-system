@@ -16,8 +16,8 @@ public class Student {
     /**
      * 学生id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 学号
@@ -34,7 +34,7 @@ public class Student {
      */
     private String nickName;
 
-    private Long clazzId;
+    private Integer clazzId;
 
     private String sex = "男";
 

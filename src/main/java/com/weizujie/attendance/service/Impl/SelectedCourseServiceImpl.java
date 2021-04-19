@@ -66,7 +66,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteSelectedCourse(Long selectedCourseId) {
+    public int deleteSelectedCourse(Integer selectedCourseId) {
         SelectedCourse selectedCourse = selectedCourseMapper.selectById(selectedCourseId);
         if (Objects.isNull(selectedCourse)) {
             return -1;
@@ -76,7 +76,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     }
 
     @Override
-    public boolean isStudentId(Long studentId) {
+    public boolean isStudentId(Integer studentId) {
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, studentId);
         List<SelectedCourse> selectedCourseList = selectedCourseMapper.selectList(wrapper);
@@ -84,7 +84,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     }
 
     @Override
-    public List<SelectedCourse> getAllBySid(Long studentid) {
+    public List<SelectedCourse> getAllBySid(Integer studentid) {
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, studentid);
         List<SelectedCourse> selectedCourses = selectedCourseMapper.selectList(wrapper);

@@ -23,11 +23,11 @@ public class Leave {
     public static int LEAVE_STATUS_DISAGREE = -1;
 
     // 请假条 id
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     // 学生 id
-    private Long studentId;
+    private Integer studentId;
 
     // 请假理由
     private String info;

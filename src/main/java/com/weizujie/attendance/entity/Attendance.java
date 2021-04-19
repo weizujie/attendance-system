@@ -9,12 +9,12 @@ import lombok.Data;
 @TableName("s_attendance")
 public class Attendance {
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
-    private Long courseId;
+    private Integer courseId;
 
-    private Long studentId;
+    private Integer studentId;
 
     private String type;
 

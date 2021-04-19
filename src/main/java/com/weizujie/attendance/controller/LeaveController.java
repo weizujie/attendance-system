@@ -99,7 +99,7 @@ public class LeaveController {
      */
     @PostMapping("/deleteLeave")
     @ResponseBody
-    public R deleteLeave(Long id) {
+    public R deleteLeave(Integer id) {
         int count = leaveService.deleteLeave(id);
         if (count > 0) {
             return R.success();

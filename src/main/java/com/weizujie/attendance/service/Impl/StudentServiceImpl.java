@@ -34,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public int deleteStudent(List<Long> ids) {
+    public int deleteStudent(List<Integer> ids) {
         return studentMapper.deleteBatchIds(ids);
         // return .deleteStudent(ids);
     }
@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean isStudentByClazzId(Long id) {
+    public boolean isStudentByClazzId(Integer id) {
         List<Student> studentList = studentMapper.isStudentByClazzId(id);
         return studentList.isEmpty();
     }

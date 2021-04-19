@@ -15,13 +15,11 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     int editCourse(Course course);
 
-    int deleteCourse(List<Long> ids);
+    int deleteCourse(List<Integer> ids);
 
-    int addStudentNum(Long courseId);
+    int addStudentNum(Integer courseId);
 
-    void deleteStudentNum(Long courseId);
+    void deleteStudentNum(Integer courseId);
 
-    List<Course> getCourseById(List<Long> ids);
-
-    long findByName(String name);
+    List<Course> getCourseById(List<Integer> ids);
 }

@@ -13,8 +13,8 @@ import java.util.Date;
 @TableName("s_admin")
 public class Admin {
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     private String username;
 

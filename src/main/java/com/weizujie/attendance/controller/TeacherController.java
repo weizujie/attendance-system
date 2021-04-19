@@ -73,7 +73,7 @@ public class TeacherController {
      */
     @PostMapping("/deleteTeacher")
     @ResponseBody
-    public R deleteTeacher(Data data) {
+    public R<Boolean> deleteTeacher(Data data) {
         int count = teacherService.deleteTeacher(data.getIds());
         if (count > 0) {
             return R.success();
@@ -87,7 +87,7 @@ public class TeacherController {
      */
     @RequestMapping("/addTeacher")
     @ResponseBody
-    public R addTeacher(Teacher teacher) {
+    public R<Boolean> addTeacher(Teacher teacher) {
         int count = teacherService.addTeacher(teacher);
         if (count > 0) {
             return R.success();
@@ -98,8 +98,9 @@ public class TeacherController {
 
     @PostMapping("/editTeacher")
     @ResponseBody
-    public R editTeacher(Teacher teacher) {
+    public R<Boolean> editTeacher(Teacher teacher) {
         int count = teacherService.editTeacher(teacher);
+        System.out.println(count);
         if (count > 0) {
             return R.success();
         } else {

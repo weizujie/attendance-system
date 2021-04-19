@@ -33,23 +33,18 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public int deleteTeacher(List<Long> ids) {
-        return teacherMapper.deleteTeacher(ids);
+    public int deleteTeacher(List<Integer> ids) {
+        return teacherMapper.deleteBatchIds(ids);
     }
 
     @Override
     public int addTeacher(Teacher teacher) {
-        return teacherMapper.addTeacher(teacher);
-    }
-
-    @Override
-    public Teacher findById(Long tid) {
-        return teacherMapper.findById(tid);
+        return teacherMapper.insert(teacher);
     }
 
     @Override
     public int editTeacher(Teacher teacher) {
-        return teacherMapper.editTeacher(teacher);
+        return teacherMapper.updateById(teacher);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class SelectedCourseController {
      */
     @PostMapping("/deleteSelectedCourse")
     @ResponseBody
-    public R deleteSelectedCourse(Long id) {
+    public R deleteSelectedCourse(Integer id) {
         int count = selectedCourseService.deleteSelectedCourse(id);
         if (count > 0) {
             return R.success();

@@ -16,5 +16,5 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 
     Attendance isAttendance(Attendance attendance);
 
-    int deleteAttendance(Long id);
+    int deleteAttendance(Integer id);
 }

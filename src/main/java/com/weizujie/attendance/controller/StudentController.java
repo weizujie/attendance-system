@@ -74,9 +74,9 @@ public class StudentController {
     @PostMapping("/deleteStudent")
     @ResponseBody
     public R deleteStudent(Data data) {
-        List<Long> ids = data.getIds();
+        List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
-        for (Long id : ids) {
+        for (Integer id : ids) {
             if (!selectedCourseService.isStudentId(id)) {
                 return R.fail("无法删除,存在课程关联学生");
             }

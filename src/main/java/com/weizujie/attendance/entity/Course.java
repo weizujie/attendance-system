@@ -14,12 +14,12 @@ import java.util.Date;
 @TableName("s_course")
 public class Course {
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     private String name;
 
-    private Long teacherId;
+    private Integer teacherId;
 
     // 上课时间
     @DateTimeFormat(pattern = "HH:mm")

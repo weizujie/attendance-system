@@ -11,15 +11,5 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
 
     Integer queryCount(Map<String, Object> paramMap);
 
-    int deleteTeacher(List<Long> ids);
-
-    int addTeacher(Teacher teacher);
-
-    Teacher findById(Long tid);
-
     int editTeacher(Teacher teacher);
-
-    Teacher findByTeacher(Teacher teacher);
-
-    int editPswdByTeacher(Teacher teacher);
 }
