@@ -15,15 +15,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/clazz")
 public class ClazzController {
 
-    @Autowired
-    private ClazzService clazzService;
+    private final ClazzService clazzService;
+    private final StudentService studentService;
 
-    @Autowired
-    private StudentService studentService;
+    public ClazzController(ClazzService clazzService, StudentService studentService) {
+        this.clazzService = clazzService;
+        this.studentService = studentService;
+    }
 
     /**
      * 跳转专业页面

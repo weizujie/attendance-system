@@ -1,6 +1,6 @@
 package com.weizujie.attendance.controller;
 
-import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.SelectedCourse;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.SelectedCourseService;
@@ -40,16 +40,20 @@ public class SelectedCourseController {
         Map<String, Object> paramMap = new HashMap();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!studentid.equals("0")) paramMap.put("studentId", studentid);
-        if (!courseid.equals("0")) paramMap.put("courseId", courseid);
+        if (!"0".equals(studentid)) {
+            paramMap.put("studentId", studentid);
+        }
+        if (!"0".equals(courseid)) {
+            paramMap.put("courseId", courseid);
+        }
         //判断是老师还是学生权限
-        Student student = (Student) session.getAttribute(Constant.STUDENT);
+        Student student = (Student) session.getAttribute(UserConstant.STUDENT);
         if (!StringUtils.isEmpty(student)) {
             //是学生权限，只能查询自己的信息
             paramMap.put("studentid", student.getId());
         }
         PageBean<SelectedCourse> pageBean = selectedCourseService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
             Map<String, Object> result = new HashMap();

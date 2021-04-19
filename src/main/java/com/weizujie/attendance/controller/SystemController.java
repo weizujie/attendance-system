@@ -1,6 +1,6 @@
 package com.weizujie.attendance.controller;
 
-import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.dto.LoginDTO;
 import com.weizujie.attendance.entity.Admin;
 import com.weizujie.attendance.entity.Student;
@@ -19,20 +19,25 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Objects;
 
-import static com.weizujie.attendance.constants.Constant.*;
+import static com.weizujie.attendance.constants.UserConstant.*;
 
+
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/system")
 public class SystemController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+    private final StudentService studentService;
+    private final TeacherService teacherService;
 
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private TeacherService teacherService;
+    public SystemController(AdminService adminService, StudentService studentService, TeacherService teacherService) {
+        this.adminService = adminService;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
+    }
 
     /**
      * 跳转登录界面
@@ -77,8 +82,8 @@ public class SystemController {
                 if (Objects.isNull(admin)) {
                     return R.fail("用户名或密码错误");
                 }
-                session.setAttribute(Constant.ADMIN, admin);
-                session.setAttribute(Constant.USER_TYPE, ADMIN_CODE);
+                session.setAttribute(UserConstant.ADMIN, admin);
+                session.setAttribute(UserConstant.USER_TYPE, ADMIN_CODE);
                 break;
             }
             case STUDENT_CODE: {
@@ -86,8 +91,8 @@ public class SystemController {
                 if (Objects.isNull(student)) {
                     return R.fail("用户名或密码错误");
                 }
-                session.setAttribute(Constant.STUDENT, student);
-                session.setAttribute(Constant.USER_TYPE, STUDENT_CODE);
+                session.setAttribute(UserConstant.STUDENT, student);
+                session.setAttribute(UserConstant.USER_TYPE, STUDENT_CODE);
                 break;
             }
             case TEACHER_CODE: {
@@ -95,10 +100,11 @@ public class SystemController {
                 if (Objects.isNull(teacher)) {
                     return R.fail("用户名或密码错误");
                 }
-                session.setAttribute(Constant.TEACHER, teacher);
-                session.setAttribute(Constant.USER_TYPE, TEACHER_CODE);
+                session.setAttribute(UserConstant.TEACHER, teacher);
+                session.setAttribute(UserConstant.USER_TYPE, TEACHER_CODE);
                 break;
             }
+            default: return R.fail();
         }
         return R.success("登录成功");
     }
@@ -112,14 +118,14 @@ public class SystemController {
     public R<Boolean> editPassword(String password, String newPassword, HttpSession session) {
 
         // 从 session 中获取用户类型
-        String userType = (String) session.getAttribute(Constant.USER_TYPE);
+        String userType = (String) session.getAttribute(UserConstant.USER_TYPE);
         if (Objects.isNull(userType)) {
             return R.fail("用户类型获取失败");
         }
 
         if (ADMIN_CODE.equals(userType)) {
             // 从 session 中获取管理员信息
-            Admin admin = (Admin) session.getAttribute(Constant.ADMIN);
+            Admin admin = (Admin) session.getAttribute(UserConstant.ADMIN);
             if (Objects.nonNull(admin) && !password.equals(admin.getPassword())) {
                 return R.fail("原密码错误");
             }
@@ -134,7 +140,7 @@ public class SystemController {
 
         if (STUDENT_CODE.equals(userType)) {
             // 从 session 中获取学生信息
-            Student student = (Student) session.getAttribute(Constant.STUDENT);
+            Student student = (Student) session.getAttribute(UserConstant.STUDENT);
             if (Objects.nonNull(student) && !password.equals(student.getPassword())) {
                 return R.fail("原密码错误");
             }
@@ -149,7 +155,7 @@ public class SystemController {
 
         if (TEACHER_CODE.equals(userType)) {
             // 从 session 中获取教师信息
-            Teacher teacher = (Teacher) session.getAttribute(Constant.TEACHER);
+            Teacher teacher = (Teacher) session.getAttribute(UserConstant.TEACHER);
             if (Objects.nonNull(teacher) && !password.equals(teacher.getPassword())) {
                 return R.fail("原密码错误");
             }
