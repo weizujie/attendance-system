@@ -39,11 +39,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public int addAttendance(Attendance attendance) {
         return attendanceMapper.insert(attendance);
-        // return attendanceMapper.addAttendance(attendance);
     }
 
     @Override
-    public int deleteAttendance(Long id) {
+    public int deleteAttendance(Integer id) {
         return attendanceMapper.deleteById(id);
     }
 }

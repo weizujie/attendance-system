@@ -46,7 +46,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public int deleteLeave(Long id) {
+    public int deleteLeave(Integer id) {
         return leaveMapper.deleteLeave(id);
     }
 }

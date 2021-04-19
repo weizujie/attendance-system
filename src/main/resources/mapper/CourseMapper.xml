@@ -76,8 +76,4 @@
         </where>
     </select>
 
-    <select id="findByName" parameterType="java.lang.String" resultType="long">
-        select id from s_course where name = #{name}
-    </select>
-
 </mapper>

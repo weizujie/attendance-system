@@ -11,17 +11,17 @@ public interface StudentMapper extends BaseMapper<Student> {
 
     Integer queryCount(Map<String, Object> paramMap);
 
-    int deleteStudent(List<Long> ids);
+    int deleteStudent(List<Integer> ids);
 
     int addStudent(Student student);
 
-    Student findById(Long sid);
+    Student findById(Integer sid);
 
     int editStudent(Student student);
 
     Student findByStudent(Student student);
 
-    List<Student> isStudentByClazzId(Long id);
+    List<Student> isStudentByClazzId(Integer id);
 
     int editPswdByStudent(Student student);
 

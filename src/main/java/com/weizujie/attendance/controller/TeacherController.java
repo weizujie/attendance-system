@@ -1,6 +1,6 @@
 package com.weizujie.attendance.controller;
 
-import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.service.TeacherService;
 import com.weizujie.attendance.utils.R;
@@ -13,22 +13,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/teacher")
 public class TeacherController {
 
-    @Autowired
-    private TeacherService teacherService;
+    private final TeacherService teacherService;
 
-    @Autowired
-    private HttpSession session;
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
+
 
     @RequestMapping("/teacher_list")
     public String teacherList() {
@@ -47,18 +49,22 @@ public class TeacherController {
         Map<String, Object> paramMap = new HashMap();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!StringUtils.isEmpty(teacherName)) paramMap.put("username", teacherName);
-        if (!clazzid.equals("0")) paramMap.put("clazzid", clazzid);
+        if (!StringUtils.isEmpty(teacherName)) {
+            paramMap.put("username", teacherName);
+        }
+        if (!"0".equals(clazzid)) {
+            paramMap.put("clazzid", clazzid);
+        }
 
         //判断是老师还是学生权限
-        Teacher teacher = (Teacher) session.getAttribute(Constant.TEACHER);
+        Teacher teacher = (Teacher) session.getAttribute(UserConstant.TEACHER);
         if (!StringUtils.isEmpty(teacher)) {
             //是老师权限，只能查询自己的信息
             paramMap.put("teacherid", teacher.getId());
         }
 
         PageBean<Teacher> pageBean = teacherService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
             Map<String, Object> result = new HashMap();
@@ -73,7 +79,7 @@ public class TeacherController {
      */
     @PostMapping("/deleteTeacher")
     @ResponseBody
-    public R deleteTeacher(Data data) {
+    public R<Boolean> deleteTeacher(Data data) {
         int count = teacherService.deleteTeacher(data.getIds());
         if (count > 0) {
             return R.success();
@@ -87,7 +93,7 @@ public class TeacherController {
      */
     @RequestMapping("/addTeacher")
     @ResponseBody
-    public R addTeacher(Teacher teacher) {
+    public R<Boolean> addTeacher(Teacher teacher) {
         int count = teacherService.addTeacher(teacher);
         if (count > 0) {
             return R.success();
@@ -98,8 +104,9 @@ public class TeacherController {
 
     @PostMapping("/editTeacher")
     @ResponseBody
-    public R editTeacher(Teacher teacher) {
+    public R<Boolean> editTeacher(Teacher teacher) {
         int count = teacherService.editTeacher(teacher);
+        System.out.println(count);
         if (count > 0) {
             return R.success();
         } else {

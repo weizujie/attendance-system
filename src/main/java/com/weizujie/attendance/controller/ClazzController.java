@@ -15,15 +15,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/clazz")
 public class ClazzController {
 
-    @Autowired
-    private ClazzService clazzService;
+    private final ClazzService clazzService;
+    private final StudentService studentService;
 
-    @Autowired
-    private StudentService studentService;
+    public ClazzController(ClazzService clazzService, StudentService studentService) {
+        this.clazzService = clazzService;
+        this.studentService = studentService;
+    }
 
     /**
      * 跳转专业页面
@@ -75,8 +80,9 @@ public class ClazzController {
     @PostMapping("/deleteClazz")
     @ResponseBody
     public R deleteClazz(Data data) {
-        List<Long> ids = data.getIds();
-        for (Long id : ids) {  //判断是否存在课程关联学生
+        List<Integer> ids = data.getIds();
+        // 判断是否存在课程关联学生
+        for (Integer id : ids) {
             if (!studentService.isStudentByClazzId(id)) {
                 return R.fail("无法删除，专业下存在学生");
             }

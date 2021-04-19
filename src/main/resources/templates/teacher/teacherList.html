@@ -13,8 +13,6 @@
 		/*<![CDATA[*/
 		$(function() {
 			var table;
-
-			//datagrid初始化
 			$('#dataList').datagrid({
 				title:'教师列表',
 				iconCls:'icon-more',
@@ -22,7 +20,7 @@
 				collapsible:false,
 				fit: true,
 				method: "post",
-				url:/*[[@{/teacher/getTeacherList}]]*/,
+				url: "getTeacherList",
 				idField:'id',
 				singleSelect:false,//是否单选
 				pagination:true,//分页控件
@@ -33,10 +31,10 @@
 				columns: [
 						[
 					{field:'chk',checkbox: true,width:50},
-					{field:'id',title:'ID',width:50, sortable: true},
-					{field:'username',title:'用户名',width:150},
+					{field:'id',title:'ID',width:250, sortable: true},
+					{field:'username',title:'姓名',width:150},
 					{field:'sex',title:'性别',width:100},
-					{field:'mobile',title:'电话',width:150},
+					{field:'mobile',title:'联系方式',width:150},
 					{field:'clazz_id',title:'专业',width:150,
 						formatter: function(value,row,index){
 							if (row.clazzId){
@@ -78,6 +76,7 @@
 			// 修改
 			$("#edit").click(function(){
 				table = $("#editTable");
+				// 勾选的行号,并非数据库的教师id
 				var selectRows = $("#dataList").datagrid("getSelections");
 				if(selectRows.length !== 1){
 					$.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
@@ -100,7 +99,7 @@
 						if(r){
 							$.ajax({
 								type: "post",
-								url:/*[[@{/teacher/deleteTeacher}]]*/,
+								url: "deleteTeacher",
 								data: jsonObj,
 								success: function(data){
 									if(data.success){
@@ -127,7 +126,7 @@
 					multiple: false, //可多选
 					editable: false, //不可编辑
 					method: "post",
-					url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+					url: "/clazz/getClazzList?from=combox",
 					onChange: function(newValue, oldValue){
 					}
 				});
@@ -155,12 +154,11 @@
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
 							} else{
-								var clazzid = $("#add_clazzList").combobox("getValue");
 								var formData = new FormData($( "#addForm" )[0]);
 
 								$.ajax({
 									type: "post",
-									url:/*[[@{/teacher/addTeacher}]]*/,
+									url: "addTeacher",
 									data: formData,
 									async: false,
 									cache: false,
@@ -228,7 +226,7 @@
 
 
 			$("#add_clazzList").combobox({
-				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
 					//默认选择第一条数据
 					var data = $(this).combobox("getData");
@@ -236,9 +234,9 @@
 				}
 			});
 
-			//编辑教师信息专业下拉框
+			// 编辑教师专业下拉框
 			$("#edit_clazzList").combobox({
-				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
+				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
 					//默认选择第一条数据
 					var data = $(this).combobox("getData");
@@ -247,7 +245,7 @@
 			});
 
 
-			//编辑教师信息
+			// 编辑教师信息
 			$("#editDialog").dialog({
 				title: "修改教师信息",
 				width: 850,
@@ -269,12 +267,13 @@
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
 							} else{
-								var id = $("#dataList").datagrid("getSelected").id;
+								var id = $("#dataList").datagrid("getSelected");
+								console.log(id);
 								var formData = new FormData($( "#editForm" )[0]);
-								formData.append("id",id);
+								formData.append("id", id);
 								$.ajax({
 									type: "post",
-									url:/*[[@{/teacher/editTeacher}]]*/,
+									url: "editTeacher",
 									data: formData,
 									async: false,
 									cache: false,
@@ -364,7 +363,7 @@
 		<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
 	</div>
 	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
-		&nbsp;&nbsp;用户名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" />
+		&nbsp;&nbsp;姓名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" />
 	</div>
 	<div style="margin-left: 10px;margin-top:4px;" >
 		专业：<input id="clazzList" class="easyui-textbox" name="clazz" />
@@ -384,7 +383,7 @@
 				<td style="width:80px"></td>
 			</tr>
 			<tr>
-				<td>用户名:</td>
+				<td>姓名:</td>
 				<td colspan="4"><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写用户名'" /></td>
 			</tr>
 			<tr>
@@ -396,7 +395,7 @@
 				<td colspan="4"><select id="add_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
 			</tr>
 			<tr>
-				<td>电话:</td>
+				<td>联系方式:</td>
 				<td colspan="4"><input id="add_phone" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
 			</tr>
 		</table>
@@ -424,13 +423,11 @@
 				<td><select id="edit_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
 			</tr>
 			<tr>
-				<td>电话:</td>
+				<td>联系方式:</td>
 				<td><input id="edit_phone" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
 			</tr>
 		</table>
 	</form>
 </div>
-
-<iframe id="photo_target" name="photo_target"></iframe>
 </body>
 </html>

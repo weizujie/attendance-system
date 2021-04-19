@@ -14,5 +14,5 @@ public interface LeaveService {
 
     int checkLeave(Leave leave);
 
-    int deleteLeave(Long id);
+    int deleteLeave(Integer id);
 }

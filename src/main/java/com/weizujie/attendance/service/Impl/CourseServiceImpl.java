@@ -44,14 +44,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public int deleteCourse(List<Long> ids) {
+    public int deleteCourse(List<Integer> ids) {
         return courseMapper.deleteBatchIds(ids);
     }
 
     @Override
-    public List<Course> getCourseById(List<Long> ids) {
-        List<Course> courses = courseMapper.selectBatchIds(ids);
-        System.out.println(courses.toString());
+    public List<Course> getCourseById(List<Integer> ids) {
         return courseMapper.getCourseById(ids);
     }
 }

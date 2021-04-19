@@ -12,7 +12,7 @@ public interface ClazzService {
 
     int addClazz(Clazz clazz);
 
-    int deleteClazz(List<Long> ids);
+    int deleteClazz(List<Integer> ids);
 
     int editClazz(Clazz clazz);
 

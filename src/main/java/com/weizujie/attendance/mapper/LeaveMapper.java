@@ -17,5 +17,5 @@ public interface LeaveMapper extends BaseMapper<Leave> {
 
     int checkLeave(Leave leave);
 
-    int deleteLeave(Long id);
+    int deleteLeave(Integer id);
 }

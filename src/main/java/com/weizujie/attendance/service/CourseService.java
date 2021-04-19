@@ -13,7 +13,7 @@ public interface CourseService {
 
     int editCourse(Course course);
 
-    int deleteCourse(List<Long> ids);
+    int deleteCourse(List<Integer> ids);
 
-    List<Course> getCourseById(List<Long> ids);
+    List<Course> getCourseById(List<Integer> ids);
 }

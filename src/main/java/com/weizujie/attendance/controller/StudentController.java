@@ -1,6 +1,6 @@
 package com.weizujie.attendance.controller;
 
-import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.SelectedCourseService;
 import com.weizujie.attendance.service.StudentService;
@@ -17,15 +17,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/student")
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
+    private final SelectedCourseService selectedCourseService;
 
-    @Autowired
-    private SelectedCourseService selectedCourseService;
+    public StudentController(StudentService studentService, SelectedCourseService selectedCourseService) {
+        this.studentService = studentService;
+        this.selectedCourseService = selectedCourseService;
+    }
 
     /**
      * 跳转学生列表页面
@@ -47,18 +52,22 @@ public class StudentController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!StringUtils.isEmpty(studentName)) paramMap.put("username", studentName);
-        if (!clazzid.equals("0")) paramMap.put("clazzid", clazzid);
+        if (!StringUtils.isEmpty(studentName)) {
+            paramMap.put("username", studentName);
+        }
+        if (!"0".equals(clazzid)) {
+            paramMap.put("clazzid", clazzid);
+        }
 
         //判断是老师还是学生权限
-        Student student = (Student) session.getAttribute(Constant.STUDENT);
+        Student student = (Student) session.getAttribute(UserConstant.STUDENT);
         if (!StringUtils.isEmpty(student)) {
             //是学生权限，只能查询自己的信息
             paramMap.put("studentid", student.getId());
         }
 
         PageBean<Student> pageBean = studentService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
             Map<String, Object> result = new HashMap<>();
@@ -74,9 +83,9 @@ public class StudentController {
     @PostMapping("/deleteStudent")
     @ResponseBody
     public R deleteStudent(Data data) {
-        List<Long> ids = data.getIds();
+        List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
-        for (Long id : ids) {
+        for (Integer id : ids) {
             if (!selectedCourseService.isStudentId(id)) {
                 return R.fail("无法删除,存在课程关联学生");
             }

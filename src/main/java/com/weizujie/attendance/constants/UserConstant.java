@@ -1,7 +1,10 @@
 package com.weizujie.attendance.constants;
 
-public interface Constant {
-
+/**
+ * 用户相关常量
+ * @author weizujie
+ */
+public interface UserConstant {
 
     String ADMIN = "admin";
 

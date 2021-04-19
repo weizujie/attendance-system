@@ -12,5 +12,5 @@ public interface AttendanceService {
 
     int addAttendance(Attendance attendance);
 
-    int deleteAttendance(Long id);
+    int deleteAttendance(Integer id);
 }

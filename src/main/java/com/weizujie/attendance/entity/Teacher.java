@@ -13,14 +13,14 @@ import java.util.Date;
 @TableName("s_teacher")
 public class Teacher {
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     private String username;
 
     private String password;
 
-    private Long clazzId;
+    private Integer clazzId;
 
     private String sex = "男";
 

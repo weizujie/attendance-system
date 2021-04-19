@@ -1,6 +1,6 @@
 package com.weizujie.attendance.controller;
 
-import com.weizujie.attendance.constants.Constant;
+import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Attendance;
 import com.weizujie.attendance.entity.SelectedCourse;
 import com.weizujie.attendance.entity.Student;
@@ -18,18 +18,22 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/attendance")
 public class AttendanceController {
 
-    @Autowired
-    private AttendanceService attendanceService;
+    private final AttendanceService attendanceService;
+    private final SelectedCourseService selectedCourseService;
+    private final CourseService courseService;
 
-    @Autowired
-    private SelectedCourseService selectedCourseService;
-
-    @Autowired
-    private CourseService courseService;
+    public AttendanceController(AttendanceService attendanceService, SelectedCourseService selectedCourseService, CourseService courseService) {
+        this.attendanceService = attendanceService;
+        this.selectedCourseService = selectedCourseService;
+        this.courseService = courseService;
+    }
 
     @GetMapping("/attendance_list")
     public String attendanceList() {
@@ -50,10 +54,10 @@ public class AttendanceController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!studentid.equals("0")) {
+        if (!"0".equals(studentid)) {
             paramMap.put("studentid", studentid);
         }
-        if (!courseid.equals("0")) {
+        if (!"0".equals(courseid)) {
             paramMap.put("courseid", courseid);
         }
         if (!StringUtils.isEmpty(type)) {
@@ -63,14 +67,14 @@ public class AttendanceController {
             paramMap.put("date", date);
         }
 
-        Student student = (Student) session.getAttribute(Constant.STUDENT);
+        Student student = (Student) session.getAttribute(UserConstant.STUDENT);
         if (!StringUtils.isEmpty(student)) {
             // 学生用户，只能查询自己的信息
             paramMap.put("studentid", student.getId());
         }
 
         PageBean<Attendance> pageBean = attendanceService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
             Map<String, Object> result = new HashMap<>();
@@ -87,9 +91,9 @@ public class AttendanceController {
     @ResponseBody
     public Object getStudentSelectedCourseList(@RequestParam(value = "studentid", defaultValue = "0") String studentid) {
         // 通过学生id查询选课信息
-        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Long.valueOf(studentid));
+        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Integer.valueOf(studentid));
         // 通过选课中的课程id查询学生所选择的课程
-        List<Long> ids = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());
         }
@@ -123,7 +127,7 @@ public class AttendanceController {
      */
     @PostMapping("/deleteAttendance")
     @ResponseBody
-    public R deleteAttendance(Long id) {
+    public R deleteAttendance(Integer id) {
         int count = attendanceService.deleteAttendance(id);
         if (count > 0) {
             return R.success();

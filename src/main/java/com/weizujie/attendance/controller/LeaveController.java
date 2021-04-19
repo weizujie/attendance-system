@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/leave")
 public class LeaveController {
 
-    @Autowired
-    private LeaveService leaveService;
+    private final LeaveService leaveService;
+
+    public LeaveController(LeaveService leaveService) {
+        this.leaveService = leaveService;
+    }
 
     @RequestMapping("leave_list")
     public String leaveList() {
@@ -36,15 +42,15 @@ public class LeaveController {
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                @RequestParam(value = "studentid", defaultValue = "0") String studentid,
                                String from) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!studentid.equals("0")) paramMap.put("studentId", studentid);
+        if (!"0".equals(studentid)) paramMap.put("studentId", studentid);
         PageBean<Leave> pageBean = leaveService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
@@ -99,7 +105,7 @@ public class LeaveController {
      */
     @PostMapping("/deleteLeave")
     @ResponseBody
-    public R deleteLeave(Long id) {
+    public R deleteLeave(Integer id) {
         int count = leaveService.deleteLeave(id);
         if (count > 0) {
             return R.success();

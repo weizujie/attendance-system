@@ -31,20 +31,6 @@
         </where>
     </select>
 
-    <insert id="addTeacher" parameterType="com.weizujie.attendance.entity.Teacher">
-        insert into s_teacher(sn,username,password,clazz_id,sex,mobile)
-        values(#{sn},#{username},#{password},#{clazzId},#{sex},#{mobile})
-    </insert>
-
-    <delete id="deleteTeacher" parameterType="java.util.ArrayList">
-        delete from s_teacher
-        <where>
-            id in
-            <foreach collection="list" open="(" close=")" separator="," item="id">
-                #{id}
-            </foreach>
-        </where>
-    </delete>
 
     <update id="editTeacher" parameterType="com.weizujie.attendance.entity.Teacher">
         update s_teacher
@@ -64,20 +50,5 @@
         </set>
         where id = #{id}
 
-    </update>
-
-
-    <select id="findById" parameterType="int" resultType="com.weizujie.attendance.entity.Teacher">
-        select * from s_teacher where id = #{tid}
-    </select>
-
-
-    <select id="findByTeacher" parameterType="com.weizujie.attendance.entity.Teacher"
-            resultType="com.weizujie.attendance.entity.Teacher">
-        select * from s_teacher where username = #{username} and password = #{password}
-    </select>
-
-    <update id="editPswdByTeacher" parameterType="com.weizujie.attendance.entity.Teacher">
-        update  s_teacher set password = #{password} where id = #{id}
     </update>
 </mapper>

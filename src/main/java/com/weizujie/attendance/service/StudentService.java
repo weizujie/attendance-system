@@ -10,7 +10,7 @@ import java.util.Map;
 public interface StudentService {
     PageBean<Student> queryPage(Map<String, Object> paramMap);
 
-    int deleteStudent(List<Long> ids);
+    int deleteStudent(List<Integer> ids);
 
     int addStudent(Student student);
 
@@ -18,7 +18,7 @@ public interface StudentService {
 
     Student login(LoginDTO loginDTO);
 
-    boolean isStudentByClazzId(Long next);
+    boolean isStudentByClazzId(Integer next);
 
     int editPswdByStudent(Student student);
 

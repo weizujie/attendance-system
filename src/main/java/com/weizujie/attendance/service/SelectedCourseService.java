@@ -11,9 +11,9 @@ public interface SelectedCourseService {
 
     int addSelectedCourse(SelectedCourse selectedCourse);
 
-    int deleteSelectedCourse(Long id);
+    int deleteSelectedCourse(Integer id);
 
-    boolean isStudentId(Long studentId);
+    boolean isStudentId(Integer studentId);
 
-    List<SelectedCourse> getAllBySid(Long studentid);
+    List<SelectedCourse> getAllBySid(Integer StudentId);
 }

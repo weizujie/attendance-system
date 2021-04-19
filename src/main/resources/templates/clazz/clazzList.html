@@ -15,23 +15,23 @@
             //datagrid初始化
             $('#dataList').datagrid({
                 title:'专业列表',
-                iconCls:'icon-more',//图标
+                iconCls:'icon-more',
                 border: true,
-                collapsible: false,//是否可折叠的
-                fit: true,//自动大小
+                collapsible: false,
+                fit: true,
                 method: "post",
-                url:/*[[@{/clazz/getClazzList}]]*/,
+                url: "getClazzList",
                 idField:'id',
-                singleSelect: false,//是否单选
-                pagination: true,//分页控件
-                rownumbers: true,//行号
+                singleSelect: false,
+                pagination: true,
+                rownumbers: true,
                 sortName: 'id',
                 sortOrder: 'DESC',
                 remoteSort: false,
                 columns: [
                     [
                     {field:'chk',checkbox: true,width:50},
-                    {field:'id',title:'ID',width:50, sortable: true},
+                    {field:'id',title:'ID',width:250, sortable: true},
                     {field:'name',title:'专业名称',width:200},
                     {field:'info',title:'专业介绍',width:100,
                     },
@@ -42,17 +42,19 @@
             //设置分页控件
             var p = $('#dataList').datagrid('getPager');
             $(p).pagination({
-                pageSize: 10,//每页显示的记录条数，默认为10
-                pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
-                beforePageText: '第',//页数文本框前显示的汉字
+                pageSize: 10,
+                pageList: [10,20,30,50,100],
+                beforePageText: '第',
                 afterPageText: '页    共 {pages} 页',
                 displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
             });
-            //设置工具类按钮
+
+            // 设置工具类按钮
             $("#add").click(function(){
                 $("#addDialog").dialog("open");
             });
-            //删除
+
+            // 删除
             $("#delete").click(function(){
                 var selectAll = $("#dataList").datagrid("getSelections");
                 if(selectAll == null){
@@ -66,16 +68,15 @@
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: /*[[@{/clazz/deleteClazz}]]*/,
+                                url: "deleteClazz",
                                 data: jsonObj,
                                 success: function(data){
                                     if(data.success){
                                         $.messager.alert("消息提醒",data.message,"info");
-                                        //刷新表格
+                                        // 刷新表格
                                         $("#dataList").datagrid("reload");
                                     } else{
                                         $.messager.alert("消息提醒",data.message,"warning");
-                                        return;
                                     }
                                 }
                             });
@@ -85,9 +86,7 @@
                 }
             });
 
-
-
-            //设置添加专业窗口
+            // 设置添加专业窗口
             $("#addDialog").dialog({
                 title: "添加专业",
                 width: 500,
@@ -108,28 +107,25 @@
                             var validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
-                                return;
                             } else{
-                                //var gradeid = $("#add_gradeList").combobox("getValue");
                                 $.ajax({
                                     type: "post",
-                                    url: /*[[@{/clazz/addClazz}]]*/,
+                                    url: "addClazz",
                                     data: $("#addForm").serialize(),
                                     success: function(data){
                                         if(data.success){
                                             $.messager.alert("消息提醒",data.message,"info");
-                                            //关闭窗口
+                                            // 关闭窗口
                                             $("#addDialog").dialog("close");
-                                            //清空原表格数据
+
+                                            // 清空原表格数据
                                             $("#add_name").textbox('setValue', "");
                                             $("#info").val("");
-                                            //重新刷新页面数据
-                                            //$('#gradeList').combobox("setValue", gradeid);
-                                            $('#dataList').datagrid("reload");
 
+                                            // 重新刷新页面数据
+                                            $('#dataList').datagrid("reload");
                                         } else{
                                             $.messager.alert("消息提醒",data.message,"warning");
-                                            return;
                                         }
                                     }
                                 });
@@ -142,7 +138,7 @@
                         iconCls:'icon-reload',
                         handler:function(){
                             $("#add_name").textbox('setValue', "");
-                            //重新加载年级
+                            // 重新加载年级
                             $("#info").val("");
                         }
                     },
@@ -160,7 +156,6 @@
             //修改按钮监听事件
             $("#edit-btn").click(function(){
                 var selectRow = $("#dataList").datagrid("getSelected");
-                //console.log(selectRow);
                 if(selectRow == null){
                     $.messager.alert("消息提醒", "请选择数据进行修改!", "warning");
                     return;
@@ -189,27 +184,25 @@
                             var validate = $("#editForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
-                                return;
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url:/*[[@{/clazz/editClazz}]]*/,
+                                    url:"editClazz",
                                     data: $("#editForm").serialize(),
                                     success: function(data){
                                         if(data.success){
                                             $.messager.alert("消息提醒",data.message,"info");
                                             //关闭窗口
                                             $("#editDialog").dialog("close");
+
                                             //清空原表格数据
                                             $("#edit_name").textbox('setValue', "");
                                             $("#edit_info").val("");
-                                            //重新刷新页面数据
-                                            //$('#gradeList').combobox("setValue", gradeid);
-                                            $('#dataList').datagrid("reload");
 
-                                        } else{
+                                            //重新刷新页面数据
+                                            $('#dataList').datagrid("reload");
+                                        } else {
                                             $.messager.alert("消息提醒",data.message,"warning");
-                                            return;
                                         }
                                     }
                                 });
@@ -222,14 +215,13 @@
                         iconCls:'icon-reload',
                         handler:function(){
                             $("#edit_name").textbox('setValue', "");
-                            //重新加载年级
+                            // 重新加载年级
                             $("#edit_info").val("");
                         }
                     },
                 ],
                 onBeforeOpen: function(){
                     var selectRow = $("#dataList").datagrid("getSelected");
-                    //console.log(selectRow);
                     //设置值
                     $("#edit_name").textbox('setValue', selectRow.name);
                     $("#edit_info").val(selectRow.info);
@@ -241,6 +233,7 @@
         /*]]>*/
     </script>
 </head>
+
 <body>
 <!-- 数据列表 -->
 <table id="dataList" cellspacing="0" cellpadding="0">
@@ -248,10 +241,19 @@
 
 <!-- 工具栏 -->
 <div id="toolbar">
-    <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
-    <div style="float: left; margin-right: 10px;"><a id="edit-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
-    <div style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
-    <div style="margin-top: 3px;">专业名称：<input id="clazzName" class="easyui-textbox" name="clazzName" />
+    <div style="float: left;">
+        <a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+        </div>
+    <div style="float: left; margin-right: 10px;">
+        <a id="edit-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
+    </div>
+    <div style="float: left; margin-right: 10px;">
+        <a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
+    </div>
+    <div style="margin-top: 3px;">
+        专业名称：<label for="clazzName">
+        <input id="clazzName" class="easyui-textbox" name="clazzName" />
+    </label>
         <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
     </div>
 </div>
@@ -262,12 +264,18 @@
         <table cellpadding="8" >
             <tr>
                 <td>专业名称:</td>
-                <td><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="name"  data-options="required:true, missingMessage:'不能为空'" /></td>
+                <td>
+                    <label for="add_name">
+                    <input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="name" data-options="required:true, missingMessage:'不能为空'" />
+                    </label>
+                </td>
             </tr>
             <tr>
                 <td>专业介绍:</td>
                 <td>
-                    <textarea id="info" name="info" style="width: 200px; height: 60px;" class="" ></textarea>
+                    <label for="info">
+                        <textarea id="info" name="info" style="width: 200px; height: 60px;" class="" ></textarea>
+                    </label>
                 </td>
             </tr>
         </table>
@@ -281,17 +289,22 @@
         <table cellpadding="8" >
             <tr>
                 <td>专业名称:</td>
-                <td><input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="name"  data-options="required:true, missingMessage:'不能为空'" /></td>
+                <td>
+                    <label for="edit_name">
+                        <input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="name" data-options="required:true, missingMessage:'不能为空'" />
+                    </label>
+                </td>
             </tr>
             <tr>
                 <td>专业介绍:</td>
                 <td>
-                    <textarea id="edit_info" name="info" style="width: 200px; height: 60px;" class="" ></textarea>
+                    <label for="edit_info">
+                        <textarea id="edit_info" name="info" style="width: 200px; height: 60px;" class="" ></textarea>
+                    </label>
                 </td>
             </tr>
         </table>
     </form>
 </div>
-
 </body>
 </html>

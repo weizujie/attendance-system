@@ -77,7 +77,7 @@
         select * from s_student where username = #{username} and password = #{password}
     </select>
 
-    <select id="isStudentByClazzId" parameterType="int" resultMap="StudentInfo">
+    <select id="isStudentByClazzId" parameterType="long" resultMap="StudentInfo">
         select * from s_student where clazz_id = #{id}
     </select>
 
