@@ -44,7 +44,7 @@ public class StudentController {
                                  @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                  String studentName,
                                  @RequestParam(value = "clazzid", defaultValue = "0") String clazzid, String from, HttpSession session) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
         if (!StringUtils.isEmpty(studentName)) paramMap.put("username", studentName);
@@ -61,7 +61,7 @@ public class StudentController {
         if (!StringUtils.isEmpty(from) && from.equals("combox")) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
@@ -96,7 +96,6 @@ public class StudentController {
     @RequestMapping("/addStudent")
     @ResponseBody
     public R addStudent(Student student) {
-        // TODO: 添加学号
         int count = studentService.addStudent(student);
         if (count > 0) {
             return R.success();
@@ -108,11 +107,11 @@ public class StudentController {
     /**
      * 修改学生信息
      */
-    @PostMapping("/editStudent")
+    @PutMapping("/editStudent")
     @ResponseBody
     public R editStudent(Student student) {
-        int count = studentService.editStudent(student);
-        if (count > 0) {
+        int i = studentService.updateById(student);
+        if (i > 0) {
             return R.success();
         } else {
             return R.fail();

@@ -103,6 +103,67 @@ public class SystemController {
         return R.success("登录成功");
     }
 
+    /**
+     * 修改密码
+     */
+    @PostMapping("/editPassword")
+    @Transactional(rollbackFor = Exception.class)
+    @ResponseBody
+    public R<Boolean> editPassword(String password, String newPassword, HttpSession session) {
+
+        // 从 session 中获取用户类型
+        String userType = (String) session.getAttribute(Constant.USER_TYPE);
+        if (Objects.isNull(userType)) {
+            return R.fail("用户类型获取失败");
+        }
+
+        if (ADMIN_CODE.equals(userType)) {
+            // 从 session 中获取管理员信息
+            Admin admin = (Admin) session.getAttribute(Constant.ADMIN);
+            if (Objects.nonNull(admin) && !password.equals(admin.getPassword())) {
+                return R.fail("原密码错误");
+            }
+            admin.setPassword(newPassword);
+            int count = adminService.editPswdByAdmin(admin);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
+            }
+        }
+
+        if (STUDENT_CODE.equals(userType)) {
+            // 从 session 中获取学生信息
+            Student student = (Student) session.getAttribute(Constant.STUDENT);
+            if (Objects.nonNull(student) && !password.equals(student.getPassword())) {
+                return R.fail("原密码错误");
+            }
+            student.setPassword(newPassword);
+            int count = studentService.editPswdByStudent(student);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
+            }
+        }
+
+        if (TEACHER_CODE.equals(userType)) {
+            // 从 session 中获取教师信息
+            Teacher teacher = (Teacher) session.getAttribute(Constant.TEACHER);
+            if (Objects.nonNull(teacher) && !password.equals(teacher.getPassword())) {
+                return R.fail("原密码错误");
+            }
+            teacher.setPassword(newPassword);
+            int count = teacherService.editPswdByTeacher(teacher);
+            if (count > 0) {
+                return R.success();
+            } else {
+                return R.fail();
+            }
+        }
+        return null;
+    }
+
 
     /**
      * 退出登录
@@ -112,65 +173,4 @@ public class SystemController {
         session.invalidate();
         return "/login";
     }
-
-    /**
-     * 修改密码
-     */
-    @PostMapping("/editPassword")
-    @Transactional(rollbackFor = Exception.class)
-    @ResponseBody
-    public R<Boolean> editPassword(String password, String newpassword, HttpSession session) {
-
-        // 从 session 中获取用户类型
-        String userType = (String) session.getAttribute(Constant.USER_TYPE);
-        if (Objects.isNull(userType)) {
-            return R.fail("用户类型获取失败");
-        }
-
-        if (ADMIN_CODE.equals(userType)) {
-
-            // 从 session 中获取管理员信息
-            Admin admin = (Admin) session.getAttribute(Constant.ADMIN);
-            if (!password.equals(admin.getPassword())) {
-                return R.fail("原密码错误");
-            }
-            admin.setPassword(newpassword);
-            int count = adminService.editPswdByAdmin(admin);
-            if (count > 0) {
-                return R.success();
-            } else {
-                return R.fail();
-            }
-        }
-        if (userType.equals("2")) {
-            //学生
-            Student student = (Student) session.getAttribute(Constant.STUDENT);
-            if (!password.equals(student.getPassword())) {
-                return R.fail("原密码错误");
-            }
-            student.setPassword(newpassword);
-            int count = studentService.editPswdByStudent(student);
-            if (count > 0) {
-                return R.success();
-            } else {
-                return R.fail();
-            }
-        }
-        if (userType.equals("3")) {
-            //教师
-            Teacher teacher = (Teacher) session.getAttribute(Constant.TEACHER);
-            if (!password.equals(teacher.getPassword())) {
-                return R.fail("原密码错误");
-            }
-            teacher.setPassword(newpassword);
-            int count = teacherService.editPswdByTeacher(teacher);
-            if (count > 0) {
-                return R.success();
-            } else {
-                return R.fail();
-            }
-        }
-        return R.success();
-    }
-
 }

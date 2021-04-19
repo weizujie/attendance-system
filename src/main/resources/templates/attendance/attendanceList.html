@@ -160,7 +160,7 @@
 
             //设置添加窗口
             $("#addDialog").dialog({
-                title: "添加考勤信息",
+                title: "添加考勤",
                 width: 450,
                 height: 300,
                 iconCls: "icon-add",
@@ -236,7 +236,7 @@
             });
 
 
-            //添加信息学生选择框
+            // 添加学生选择框
             $("#add_studentList").combobox({
                 url: [[@{/student/getStudentList(from=combox)}]],
                 onLoadSuccess: function(){
@@ -250,9 +250,9 @@
                 }
             });
 
-            //添加信息课程选择框
+            // 添加课程选择框
             $("#add_courseList").combobox({
-                url: [[@{/course/getCourseList(from=combox)}]],
+                url:/*[[@{/course/getCourseList(from=combox)}]]*/,
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -261,20 +261,27 @@
 
             });
 
+            // 学生选课列表
             function getStudentSelectedCourseList(sid){
                 //添加信息课程选择框
+                console.log("sid:", sid);
                 var u = [[@{/attendance/getStudentSelectedCourseList}]];
                 $("#add_courseList").combobox({
                     url:u+"?studentid="+sid,
                     onLoadSuccess: function(){
-                        //默认选择第一条数据
+                        // 默认选择第一条数据
                         var data = $(this).combobox("getData");
+                        console.log("getData:", data);
                         $(this).combobox("setValue", data[0].id);
                     }
                 });
             }
 
-            var typeData = [{id:"上午",text:"上午"},{id:"下午",text:"下午"}];
+            // 签到类型
+            var typeData = [
+                {id:"上午", text:"上午"},
+                {id:"下午", text:"下午"}
+            ];
             $("#add_typeList").combobox({
                 data:typeData,
                 valueField: 'id',

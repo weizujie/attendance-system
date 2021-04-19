@@ -1,5 +1,7 @@
 package com.weizujie.attendance.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.mapper.CourseMapper;
 import com.weizujie.attendance.service.CourseService;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -32,7 +35,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public int addCourse(Course course) {
-        return courseMapper.addCourse(course);
+        return courseMapper.insert(course);
     }
 
     @Override
@@ -42,17 +45,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public int deleteCourse(List<Long> ids) {
-        return courseMapper.deleteCourse(ids);
+        return courseMapper.deleteBatchIds(ids);
     }
 
     @Override
     public List<Course> getCourseById(List<Long> ids) {
+        List<Course> courses = courseMapper.selectBatchIds(ids);
+        System.out.println(courses.toString());
         return courseMapper.getCourseById(ids);
     }
-
-    @Override
-    public long findByName(String name) {
-        return courseMapper.findByName(name);
-    }
-
 }

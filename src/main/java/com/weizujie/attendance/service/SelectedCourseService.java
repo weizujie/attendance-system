@@ -13,7 +13,7 @@ public interface SelectedCourseService {
 
     int deleteSelectedCourse(Long id);
 
-    boolean isStudentId(Long id);
+    boolean isStudentId(Long studentId);
 
     List<SelectedCourse> getAllBySid(Long studentid);
 }

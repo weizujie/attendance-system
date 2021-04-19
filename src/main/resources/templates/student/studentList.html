@@ -20,7 +20,7 @@
 				collapsible:false,//是否可折叠的
 				fit: true,//自动大小
 				method: "post",
-				url:[[@{/student/getStudentList}]],
+				url:/*[[@{/student/getStudentList}]]*/,
 				idField:'id',
 				singleSelect:false,//是否单选
 				pagination:true,//分页控件
@@ -31,8 +31,9 @@
 				columns: [
 						[
 					{field:'chk',checkbox: true,width:50},
-					{field:'id',title:'ID',width:50, sortable: true},
-					{field:'username',title:'学号',width:200},
+					{field:'id',title:'ID',width:200, sortable: true},
+					{field:'username',title:'学号',width:150},
+					{field:'nickName',title:'姓名',width:150},
 					{field:'sex',title:'性别',width:100},
 					{field:'mobile',title:'电话',width:150},
 					{field:'clazz_id',title:'专业',width:150,
@@ -40,16 +41,16 @@
 							if (row.clazzId){
 								var clazzList = $("#clazzList").combobox("getData");
 								for(var i=0;i<clazzList.length;i++ ){
-									//console.log(clazzList[i]);
-									if(row.clazzId == clazzList[i].id)return clazzList[i].name;
+									if(row.clazzId === clazzList[i].id) {
+										return clazzList[i].name;
+									}
 								}
 								return row.clazzId;
 							} else {
 								return 'not found';
 							}
 						}
-					},
-
+					}, {field:'createDate', title:'创建时间', width:150}
 				]
 				],
 				toolbar: "#toolbar",
@@ -70,45 +71,47 @@
 				afterPageText: '页    共 {pages} 页',
 				displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
 			});
-			//设置工具类按钮
+
+			// 设置工具类按钮
 			$("#add").click(function(){
 				$("#addDialog").dialog("open");
 			});
-			//修改
+
+			// 修改
 			$("#edit").click(function(){
 				var selectRows = $("#dataList").datagrid("getSelections");
-				if(selectRows.length != 1){
+				if(selectRows.length !== 1){
 					$.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
 				} else{
 					$("#editDialog").dialog("open");
 				}
 			});
-			//删除
+
+			// 删除
 			$("#delete").click(function(){
 				var selectRows = $("#dataList").datagrid("getSelections");
 				var selectLength = selectRows.length;
-				if(selectLength == 0){
+				if(selectLength === 0){
 					$.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
 				} else{
 					var jsonObj = {};
 					$.each(selectRows,function(i,n){
 						jsonObj["ids["+i+"]"] = n.id;
 					});
-					$.messager.confirm("消息提醒", "将删除与学生相关的所有数据(包括成绩)，确认继续？", function(r){
+					$.messager.confirm("消息提醒", "将删除与学生相关的所有数据，确认继续？", function(r){
 						if(r){
 							$.ajax({
 								type: "post",
-								url: [[@{/student/deleteStudent}]],
+								url:/*[[@{/student/deleteStudent}]]*/,
 								data:jsonObj,
 								success: function(data){
 									if(data.success){
 										$.messager.alert("消息提醒",data.message,"info");
-										//刷新表格
+										// 刷新表格
 										$("#dataList").datagrid("reload");
 										$("#dataList").datagrid("uncheckAll");
 									} else{
 										$.messager.alert("消息提醒",data.message,"warning");
-										return;
 									}
 								}
 							});
@@ -126,11 +129,8 @@
 					multiple: false, //可多选
 					editable: false, //不可编辑
 					method: "post",
-					url: [[@{/clazz/getClazzList(from=combox)}]],
+					url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
 					onChange: function(newValue, oldValue){
-						//加载专业下的学生
-						//$('#dataList').datagrid("options").queryParams = {clazzid: newValue};
-						//$('#dataList').datagrid("reload");
 					}
 				});
 			}
@@ -148,7 +148,7 @@
 
 
 			$("#add_clazzList").combobox({
-				url: [[@{/clazz/getClazzList(from=combox)}]],
+				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
 				onLoadSuccess: function(){
 					//默认选择第一条数据
 					var data = $(this).combobox("getData");;
@@ -159,7 +159,7 @@
 
 
 			$("#edit_clazzList").combobox({
-				url: [[@{/clazz/getClazzList(from=combox)}]],
+				url:/*[[@{/clazz/getClazzList(from=combox)}]]*/,
 				onLoadSuccess: function(){
 					//默认选择第一条数据
 					var data = $(this).combobox("getData");
@@ -167,7 +167,7 @@
 				}
 			});
 
-			//设置添加学生窗口
+			// 设置添加学生窗口
 			$("#addDialog").dialog({
 				title: "添加学生",
 				width: 650,
@@ -188,13 +188,12 @@
 							var validate = $("#addForm").form("validate");
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
-								return;
 							} else{
 								var clazzid = $("#add_clazzList").combobox("getValue");
 								var formData = new FormData($( "#addForm" )[0]);
 								$.ajax({
 									type: "post",
-									url: [[@{/student/addStudent}]],
+									url:/*[[@{/student/addStudent}]]*/,
 									data: formData,
 									async: false,
 									cache: false,
@@ -203,14 +202,13 @@
 									success: function(data){
 										if(data.success){
 											$.messager.alert("消息提醒",data.message,"info");
-											//关闭窗口
+											// 关闭窗口
 											$("#addDialog").dialog("close");
-											//清空原表格数据
+											// 清空原表格数据
 											$("#add_number").textbox('setValue', "");
 											$("#add_name").textbox('setValue', "");
 											$("#add_sex").textbox('setValue', "男");
 											$("#add_phone").textbox('setValue', "");
-
 											//重新刷新页面数据
 											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
 											$('#dataList').datagrid("reload");
@@ -220,7 +218,6 @@
 
 										} else{
 											$.messager.alert("消息提醒",data.message,"warning");
-											return;
 										}
 									}
 								});
@@ -235,7 +232,7 @@
 							$("#add_number").textbox('setValue', "");
 							$("#add_name").textbox('setValue', "");
 							$("#add_phone").textbox('setValue', "");
-							//重新加载专业
+							// 重新加载专业
 							$("#add_gradeList").combobox("clear");
 							$("#add_gradeList").combobox("reload");
 						}
@@ -265,12 +262,11 @@
 							var clazzid = $("#edit_clazzList").combobox("getValue");
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
-								return;
-							} else{
-								var formData = new FormData($( "#editForm" )[0]);
+							} else {
+								var formData = new FormData($('#editForm')[0]);
 								$.ajax({
-									type: "post",
-									url: [[@{/student/editStudent}]],
+									type: "put",
+									url:/*[[@{/student/editStudent}]]*/,
 									data: formData,
 									async: false,
 									cache: false,
@@ -279,20 +275,17 @@
 									success: function(data){
 										if(data.success){
 											$.messager.alert("消息提醒",data.message,"info");
-											//关闭窗口
+											// 关闭窗口
 											$("#editDialog").dialog("close");
-											//刷新表格
+											// 刷新表格
 											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
 											$("#dataList").datagrid("reload");
 											$("#dataList").datagrid("uncheckAll");
-
 											setTimeout(function(){
 												$("#clazzList").combobox('setValue', clazzid);
 											}, 100);
-
 										} else{
 											$.messager.alert("消息提醒",data.message,"warning");
-											return;
 										}
 									}
 								});
@@ -304,7 +297,7 @@
 						plain: true,
 						iconCls:'icon-reload',
 						handler:function(){
-							//清空表单
+							// 清空表单
 							$("#imgd div").remove();
 							$("#edit_name").textbox('setValue', "");
 							$("#edit_sex").textbox('setValue', "男");
@@ -316,44 +309,22 @@
 				],
 				onBeforeOpen: function(){
 					var selectRow = $("#dataList").datagrid("getSelected");
-					$("#imgd div").remove();
-					$.ajax({
-						type: "post",
-						url: [[@{/system/getPhoto}]]+"?sid="+selectRow.id,
-						success: function(data){
-							var i = [[@{/upload/imgs/}]];
-							var imgUrl = data.imgurl;
-							var img = i + imgUrl;
-							//设置值
-							$("#edit_name").textbox('setValue', selectRow.username);
-							$("#edit_sex").textbox('setValue', selectRow.sex);
-							$("#edit_mobile").textbox('setValue', selectRow.mobile);
-							var div = document.createElement("div"),
-									img1 = document.createElement("img");
-							img1.src=img;
-							$(img1).css("width","200px");
-							$(img1).css("hight","200px");
-							div.appendChild(img1);
-							$("#imgd").append(div);
-
-							//$("#edit_photo").attr("src", img);
-							// $(".imgDiv").
-
-							$("#edit-id").val(selectRow.id);
-							$("#set-photo-id").val(selectRow.id);
-							var clazzid = selectRow.clazzId;
-							setTimeout(function(){
-								$("#edit_clazzList").combobox('setValue', clazzid);
-							}, 100);
-						}
-					});
+					//设置值
+					$("#edit_name").textbox('setValue', selectRow.nickName);
+					$("#edit_sex").textbox('setValue', selectRow.sex);
+					$("#edit_mobile").textbox('setValue', selectRow.mobile);
+					$("#edit-id").val(selectRow.id);
+					var clazzid = selectRow.clazzId;
+					setTimeout(function(){
+						$("#edit_clazzList").combobox('setValue', clazzid);
+					}, 100);
 				}
 			});
 			//搜索按钮监听事件
 			$("#search-btn").click(function(){
 				$('#dataList').datagrid('load',{
 					studentName: $('#search_student_name').val(),
-					clazzid: $("#clazzList").combobox('getValue') == '' ? 0 : $("#clazzList").combobox('getValue')
+					clazzid: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 				});
 			});
 		});
@@ -367,16 +338,23 @@
 </table>
 <!-- 工具栏 -->
 <div id="toolbar">
-		<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
-		<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
-	<div style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
+	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;">
+			<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+	</div>
+	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
+	<div style="float: left;">
+		<a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
+	</div>
 	<div style="float: left;" class="datagrid-btn-separator"></div>
-		<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
-	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >&nbsp;&nbsp;姓名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" /></div>
-	<div style="margin-left: 10px;margin-top:4px;" >专业：<input id="clazzList" class="easyui-textbox" name="clazz" />
+		<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;">
+			<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
+		</div>
+	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
+		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" /></div>
+	<div style="margin-left: 10px;margin-top:4px;" >
+		专业：<input id="clazzList" class="easyui-textbox" name="clazz" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
 	</div>
-
 </div>
 
 <!-- 添加学生窗口 -->
@@ -384,13 +362,19 @@
 	<form id="addForm" method="post" enctype="multipart/form-data">
 		<table cellpadding="8" >
 			<tr>
-				<td>姓名:</td>
-				<td><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写姓名'" /></td>
+				<td>学号:</td>
+				<td><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写学号'" /></td>
 			</tr>
 			<tr>
 				<td>密码:</td>
 				<td>
 					<input id="add_password"  class="easyui-textbox" style="width: 200px; height: 30px;" type="password" name="password" data-options="required:true, missingMessage:'请输入登录密码'" />
+				</td>
+			</tr>
+			<tr>
+				<td>姓名:</td>
+				<td>
+					<input id="add_nick_name" class="easyui-textbox" style="width: 200px; height: 30px;" type="text" name="nickName"/>
 				</td>
 			</tr>
 			<tr>
@@ -416,7 +400,7 @@
 		<table cellpadding="8" >
 			<tr>
 				<td>姓名:</td>
-				<td><input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写姓名'" /></td>
+				<td><input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="nickName"/></td>
 			</tr>
 			<tr>
 				<td>性别:</td>
@@ -433,7 +417,5 @@
 		</table>
 	</form>
 </div>
-<!-- 提交表单处理iframe框架 -->
-<iframe id="photo_target" name="photo_target"></iframe>
 </body>
 </html>

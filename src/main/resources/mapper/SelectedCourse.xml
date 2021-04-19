@@ -37,7 +37,7 @@
         delete from s_selected_course where id = #{id}
     </delete>
 
-    <select id="findById" parameterType="int" resultMap="SelectedCourseInfo">
+    <select id="findById" parameterType="long" resultMap="SelectedCourseInfo">
         select  * from s_selected_course where id = #{id}
     </select>
 
