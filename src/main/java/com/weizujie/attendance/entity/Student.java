@@ -9,6 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * @author weizujie
+ */
 @Data
 @TableName("s_student")
 public class Student {
@@ -34,12 +37,24 @@ public class Student {
      */
     private String nickName;
 
+    /**
+     * 专业 id
+     */
     private Integer clazzId;
 
+    /**
+     * 性别 默认：男
+     */
     private String sex = "男";
 
+    /**
+     * 联系方式
+     */
     private String mobile;
 
+    /**
+     * 创建时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;

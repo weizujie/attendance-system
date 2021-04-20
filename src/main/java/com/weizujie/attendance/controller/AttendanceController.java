@@ -2,16 +2,16 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Attendance;
+import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.entity.SelectedCourse;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.AttendanceService;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.service.SelectedCourseService;
-import com.weizujie.attendance.utils.DateFormatUtil;
 import com.weizujie.attendance.utils.PageBean;
 import com.weizujie.attendance.utils.R;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,7 +97,12 @@ public class AttendanceController {
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());
         }
-        return courseService.getCourseById(ids);
+        // 学生选课列表
+        List<Course> courseById = courseService.getCourseById(ids);
+        if (CollectionUtils.isEmpty(courseById)) {
+            return R.fail("该学生未进行选课");
+        }
+        return courseById;
     }
 
 
@@ -106,11 +111,10 @@ public class AttendanceController {
      */
     @PostMapping("/addAttendance")
     @ResponseBody
-    public R addAttendance(Attendance attendance) {
-        attendance.setDate(DateFormatUtil.getFormatDate(new Date(), "yyyy-MM-dd"));
+    public R<Boolean> addAttendance(Attendance attendance) {
         // 判断是否已签到
-        if (attendanceService.isAttendance(attendance)) {
-            // true为已签到
+        if (attendanceService.checkAttendance(attendance)) {
+            // true 为已签到
             return R.success("已签到，请勿重复签到");
         } else {
             int count = attendanceService.addAttendance(attendance);
@@ -127,7 +131,7 @@ public class AttendanceController {
      */
     @PostMapping("/deleteAttendance")
     @ResponseBody
-    public R deleteAttendance(Integer id) {
+    public R<Boolean> deleteAttendance(Integer id) {
         int count = attendanceService.deleteAttendance(id);
         if (count > 0) {
             return R.success();

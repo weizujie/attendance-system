@@ -30,38 +30,19 @@
         </where>
     </select>
 
-    <insert id="addCourse" parameterType="com.weizujie.attendance.entity.Course">
-        insert into s_course(name,teacher_id,course_date,max_num,info)
-        values(#{name},#{teacherId},#{courseDate},#{maxNum},#{info})
-    </insert>
-
-    <delete id="deleteCourse" parameterType="java.util.ArrayList">
-        delete from s_course
-        <where>
-            id in
-            <foreach collection="list" open="(" close=")" separator="," item="id">
-                #{id}
-            </foreach>
-        </where>
-    </delete>
-
-    <update id="editCourse" parameterType="com.weizujie.attendance.entity.Course">
-        update s_course set name = #{name},teacher_id = #{teacherId},course_date = #{courseDate},max_num = #{maxNum},info = #{info} where id = #{id}
-    </update>
-
-    <update id="addStudentNum" parameterType="long">
+    <update id="addStudentNum" parameterType="int">
          update s_course
          set selected_num = (case
             when selected_num = max_num then 50
-            when selected_num &lt; max_num then selected_num+1
+            when selected_num &lt; max_num then selected_num + 1
             end
          )
          where id = #{courseId}
     </update>
 
-    <update id="deleteStudentNum" parameterType="long">
+    <update id="deleteStudentNum" parameterType="int">
          update s_course
-         set selected_num = selected_num-1
+         set selected_num = selected_num - 1
          where id = #{courseId}
     </update>
 

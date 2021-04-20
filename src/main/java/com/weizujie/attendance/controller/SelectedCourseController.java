@@ -15,12 +15,18 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author weizujie
+ */
 @Controller
 @RequestMapping("/selectedCourse")
 public class SelectedCourseController {
 
-    @Autowired
-    private SelectedCourseService selectedCourseService;
+    private final SelectedCourseService selectedCourseService;
+
+    public SelectedCourseController(SelectedCourseService selectedCourseService) {
+        this.selectedCourseService = selectedCourseService;
+    }
 
 
     @GetMapping("/selectedCourse_list")
@@ -37,7 +43,7 @@ public class SelectedCourseController {
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                @RequestParam(value = "teacherid", defaultValue = "0") String studentid,
                                @RequestParam(value = "teacherid", defaultValue = "0") String courseid, String from, HttpSession session) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
         if (!"0".equals(studentid)) {
@@ -56,7 +62,7 @@ public class SelectedCourseController {
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
@@ -68,7 +74,7 @@ public class SelectedCourseController {
      */
     @PostMapping("/addSelectedCourse")
     @ResponseBody
-    public R addSelectedCourse(SelectedCourse selectedCourse) {
+    public R<Boolean> addSelectedCourse(SelectedCourse selectedCourse) {
         int count = selectedCourseService.addSelectedCourse(selectedCourse);
         if (count == 1) {
             return R.success();
@@ -86,7 +92,7 @@ public class SelectedCourseController {
      */
     @PostMapping("/deleteSelectedCourse")
     @ResponseBody
-    public R deleteSelectedCourse(Integer id) {
+    public R<Boolean> deleteSelectedCourse(Integer id) {
         int count = selectedCourseService.deleteSelectedCourse(id);
         if (count > 0) {
             return R.success();

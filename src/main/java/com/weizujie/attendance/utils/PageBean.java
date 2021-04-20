@@ -2,13 +2,32 @@ package com.weizujie.attendance.utils;
 
 import java.util.List;
 
+/**
+ * @author weizujie
+ */
 public class PageBean<T> {
 
-    private Integer pageno;  //第几页
-    private Integer pagesize; //每页条数
+    /**
+     * 第几页
+     */
+    private Integer pageno;
+
+    /**
+     * 每页条数
+     */
+    private Integer pagesize;
+
+    /**
+     * 总共几页
+     */
+    private Integer totalno;
+
+    /**
+     * 总的条数
+     */
+    private Integer totalsize;
+
     private List<T> datas;
-    private Integer totalno; //总共几页
-    private Integer totalsize; //总的条数
 
     public PageBean(Integer pageno, Integer pagesize) {
         if (pageno <= 0) {

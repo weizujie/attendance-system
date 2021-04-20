@@ -8,11 +8,6 @@ spring:
     username: root
     password: toor
 
-  redis:
-    host: localhost
-    port: 6379
-    database: 1
-
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:

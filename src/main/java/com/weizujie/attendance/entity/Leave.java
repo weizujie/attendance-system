@@ -9,36 +9,57 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * @author weizujie
+ */
 @Data
 @TableName("s_leave")
 public class Leave {
 
-    // 等待审核
+    /**
+     * 等待审核
+     */
     public static int LEAVE_STATUS_WAIT = 0;
 
-    // 同意
+    /**
+     * 同意
+     */
     public static int LEAVE_STATUS_AGREE = 1;
 
-    // 不同意
+    /**
+     * 不同意
+     */
     public static int LEAVE_STATUS_DISAGREE = -1;
 
-    // 请假条 id
+    /**
+     * 请假条 id 自增
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    // 学生 id
+    /**
+     * 学生 id
+     */
     private Integer studentId;
 
-    // 请假理由
+    /**
+     * 请假理由
+     */
     private String info;
 
-    // 请假条状态
+    /**
+     * 请假条状态
+     */
     private Integer status = LEAVE_STATUS_WAIT;
 
-    // 批复内容
+    /**
+     * 批复内容
+     */
     private String remark;
 
-    // 请假时间
+    /**
+     * 请假时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;

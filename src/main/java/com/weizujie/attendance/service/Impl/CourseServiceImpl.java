@@ -1,23 +1,25 @@
 package com.weizujie.attendance.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.mapper.CourseMapper;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.utils.PageBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * @author weizujie
+ */
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    @Autowired
-    private CourseMapper courseMapper;
+    private final CourseMapper courseMapper;
+
+    public CourseServiceImpl(CourseMapper courseMapper) {
+        this.courseMapper = courseMapper;
+    }
 
     @Override
     public PageBean<Course> queryPage(Map<String, Object> paramMap) {
@@ -40,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public int editCourse(Course course) {
-        return courseMapper.editCourse(course);
+        return courseMapper.updateById(course);
     }
 
     @Override

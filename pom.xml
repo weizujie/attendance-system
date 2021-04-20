@@ -66,13 +66,6 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.9</version>
         </dependency>
-
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>2.2.6.RELEASE</version>
-        </dependency>
     </dependencies>
 
     <build>

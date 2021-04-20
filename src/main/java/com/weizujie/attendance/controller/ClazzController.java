@@ -45,15 +45,17 @@ public class ClazzController {
     @ResponseBody
     public Object getClazzList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows, String clazzName, String from) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!StringUtils.isEmpty(clazzName)) paramMap.put("name", clazzName);
+        if (!StringUtils.isEmpty(clazzName)) {
+            paramMap.put("name", clazzName);
+        }
         PageBean<Clazz> pageBean = clazzService.queryPage(paramMap);
-        if (!StringUtils.isEmpty(from) && from.equals("combox")) {
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
@@ -65,7 +67,7 @@ public class ClazzController {
      */
     @PostMapping("/addClazz")
     @ResponseBody
-    public R addClazz(Clazz clazz) {
+    public R<Boolean> addClazz(Clazz clazz) {
         int count = clazzService.add(clazz);
         if (count > 0) {
             return R.success();
@@ -79,7 +81,7 @@ public class ClazzController {
      */
     @PostMapping("/deleteClazz")
     @ResponseBody
-    public R deleteClazz(Data data) {
+    public R<Boolean> deleteClazz(Data data) {
         List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
         for (Integer id : ids) {
@@ -100,7 +102,7 @@ public class ClazzController {
      */
     @PostMapping("/editClazz")
     @ResponseBody
-    public R editClazz(Clazz clazz) {
+    public R<Boolean> editClazz(Clazz clazz) {
         int count = clazzService.editClazz(clazz);
         if (count > 0) {
             return R.success();
