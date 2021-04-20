@@ -8,7 +8,7 @@ import java.util.Map;
 public interface AttendanceService {
     PageBean<Attendance> queryPage(Map<String, Object> paramMap);
 
-    boolean isAttendance(Attendance attendance);
+    boolean checkAttendance(Attendance attendance);
 
     int addAttendance(Attendance attendance);
 

@@ -46,7 +46,7 @@ public class TeacherController {
                                  @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                  String teacherName,
                                  @RequestParam(value = "clazzid", defaultValue = "0") String clazzid, String from, HttpSession session) {
-        Map<String, Object> paramMap = new HashMap();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
         if (!StringUtils.isEmpty(teacherName)) {
@@ -67,7 +67,7 @@ public class TeacherController {
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
-            Map<String, Object> result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;

@@ -82,7 +82,7 @@ public class StudentController {
      */
     @PostMapping("/deleteStudent")
     @ResponseBody
-    public R deleteStudent(Data data) {
+    public R<Boolean> deleteStudent(Data data) {
         List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
         for (Integer id : ids) {
@@ -104,7 +104,7 @@ public class StudentController {
      */
     @RequestMapping("/addStudent")
     @ResponseBody
-    public R addStudent(Student student) {
+    public R<Boolean> addStudent(Student student) {
         int count = studentService.addStudent(student);
         if (count > 0) {
             return R.success();
@@ -118,7 +118,7 @@ public class StudentController {
      */
     @PutMapping("/editStudent")
     @ResponseBody
-    public R editStudent(Student student) {
+    public R<Boolean> editStudent(Student student) {
         int i = studentService.updateById(student);
         if (i > 0) {
             return R.success();

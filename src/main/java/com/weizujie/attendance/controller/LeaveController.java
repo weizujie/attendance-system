@@ -45,7 +45,9 @@ public class LeaveController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!"0".equals(studentid)) paramMap.put("studentId", studentid);
+        if (!"0".equals(studentid)) {
+            paramMap.put("studentId", studentid);
+        }
         PageBean<Leave> pageBean = leaveService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
@@ -62,7 +64,7 @@ public class LeaveController {
      */
     @PostMapping("/addLeave")
     @ResponseBody
-    public R addLeave(Leave leave) {
+    public R<Boolean> addLeave(Leave leave) {
         int count = leaveService.addLeave(leave);
         if (count > 0) {
             return R.success();
@@ -76,7 +78,7 @@ public class LeaveController {
      */
     @PostMapping("/editLeave")
     @ResponseBody
-    public R editLeave(Leave leave) {
+    public R<Boolean> editLeave(Leave leave) {
         int count = leaveService.editLeave(leave);
         if (count > 0) {
             return R.success();
@@ -90,7 +92,7 @@ public class LeaveController {
      */
     @PostMapping("/checkLeave")
     @ResponseBody
-    public R checkLeave(Leave leave) {
+    public R<Boolean> checkLeave(Leave leave) {
         int count = leaveService.checkLeave(leave);
         if (count > 0) {
             return R.success();
@@ -105,7 +107,7 @@ public class LeaveController {
      */
     @PostMapping("/deleteLeave")
     @ResponseBody
-    public R deleteLeave(Integer id) {
+    public R<Boolean> deleteLeave(Integer id) {
         int count = leaveService.deleteLeave(id);
         if (count > 0) {
             return R.success();

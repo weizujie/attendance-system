@@ -12,11 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * @author weizujie
+ */
 @Service
 public class ClazzServiceImpl implements ClazzService {
 
-    @Autowired
-    private ClazzMapper clazzMapper;
+    private final ClazzMapper clazzMapper;
+
+    public ClazzServiceImpl(ClazzMapper clazzMapper) {
+        this.clazzMapper = clazzMapper;
+    }
 
     @Override
     public PageBean<Clazz> queryPage(Map<String, Object> paramMap) {
@@ -33,24 +39,14 @@ public class ClazzServiceImpl implements ClazzService {
     }
 
     @Override
-    public int addClazz(Clazz clazz) {
-        return clazzMapper.addClazz(clazz);
-    }
-
-    @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteClazz(List<Integer> ids) {
-        return clazzMapper.deleteClazz(ids);
+        return clazzMapper.deleteBatchIds(ids);
     }
 
     @Override
     public int editClazz(Clazz clazz) {
-        return clazzMapper.editClazz(clazz);
-    }
-
-    @Override
-    public Clazz findByName(String clazzName) {
-        return clazzMapper.findByName(clazzName);
+        return clazzMapper.updateById(clazz);
     }
 
     @Override

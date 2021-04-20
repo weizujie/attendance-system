@@ -10,21 +10,20 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
         $(function() {
             //datagrid初始化
             $('#dataList').datagrid({
-                title:'考勤信息列表',
-                iconCls:'icon-more',//图标
+                title:'考勤列表',
+                iconCls:'icon-more',
                 border: true,
-                collapsible: false,//是否可折叠的
-                fit: true,//自动大小
+                collapsible: false,
+                fit: true,
                 method: "post",
-                url:[[@{/attendance/getAttendanceList}]],
+                url: "getAttendanceList",
                 idField:'id',
-                singleSelect: true,//是否单选
-                pagination: true,//分页控件
-                rownumbers: true,//行号
+                singleSelect: true,
+                pagination: true,
+                rownumbers: true,
                 sortName:'id',
                 sortOrder:'DESC',
                 remoteSort: false,
@@ -37,8 +36,9 @@
                             if (row.studentId){
                                 var studentList = $("#studentList").combobox("getData");
                                 for(var i=0;i<studentList.length;i++ ){
-                                    //console.log(clazzList[i]);
-                                    if(row.studentId == studentList[i].id)return studentList[i].username;
+                                    if(row.studentId === studentList[i].id) {
+                                        return studentList[i].username;
+                                    }
                                 }
                                 return row.studentId;
                             } else {
@@ -51,8 +51,9 @@
                             if (row.courseId){
                                 var courseList = $("#courseList").combobox("getData");
                                 for(var i=0;i<courseList.length;i++ ){
-                                    //console.log(clazzList[i]);
-                                    if(row.courseId == courseList[i].id)return courseList[i].name;
+                                    if(row.courseId === courseList[i].id) {
+                                        return courseList[i].name;
+                                    }
                                 }
                                 return row.courseId;
                             } else {
@@ -66,17 +67,12 @@
                 ],
                 toolbar: "#toolbar",
                 onBeforeLoad : function(){
-                // try{
-                //     $("#studentList").combobox("getData")
-                // }catch(err){
-                //     preLoadClazz();
-                // }
                     preLoadClazz();
                     $("#studentList").combobox("getData");
                     $("#courseList").combobox("getData");
                 }
             });
-            //提前加载学生和课程信息
+            // 提前加载学生和课程信息
             function preLoadClazz(){
                 $("#studentList").combobox({
                     width: "80",
@@ -86,7 +82,7 @@
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: [[@{/student/getStudentList(from=combox)}]],
+                    url: "/student/getStudentList?from=combox",
 
                 });
                 $("#courseList").combobox({
@@ -94,34 +90,33 @@
                     height: "25",
                     valueField: "id",
                     textField: "name",
-                    multiple: false, //可多选
-                    editable: false, //不可编辑
+                    multiple: false,
+                    editable: false,
                     method: "post",
-                    url: [[@{/course/getCourseList(from=combox)}]],
-
+                    url: "/course/getCourseList?from=combox",
                 });
             }
 
-            //设置分页控件
+            // 设置分页控件
             var p = $('#dataList').datagrid('getPager');
             $(p).pagination({
-                pageSize: 10,//每页显示的记录条数，默认为10
-                pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
-                beforePageText: '第',//页数文本框前显示的汉字
+                pageSize: 10,
+                pageList: [10,20,30,50,100],
+                beforePageText: '第',
                 afterPageText: '页    共 {pages} 页',
                 displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
             });
 
-            //设置工具类按钮
+            // 设置工具类按钮
             $("#add").click(function(){
                 $("#addDialog").dialog("open");
             });
 
-            //设置编辑按钮
+            // 设置编辑按钮
             $("#edit").click(function(){
                 table = $("#editTable");
                 var selectRows = $("#dataList").datagrid("getSelections");
-                if(selectRows.length != 1){
+                if(selectRows.length !== 1){
                     $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
                 } else{
                     $("#editDialog").dialog("open");
@@ -129,7 +124,7 @@
             });
 
 
-            //删除
+            // 删除
             $("#delete").click(function(){
                 var selectRow = $("#dataList").datagrid("getSelected");
                 if(selectRow == null){
@@ -140,16 +135,15 @@
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: [[@{/attendance/deleteAttendance}]],
+                                url: "deleteAttendance",
                                 data: {id: id},
                                 success: function(data){
                                     if(data.success){
                                         $.messager.alert("消息提醒",data.message,"info");
-                                        //刷新表格
+                                        // 刷新表格
                                         $("#dataList").datagrid("reload");
                                     } else{
                                         $.messager.alert("消息提醒",data.message,"warning");
-                                        return;
                                     }
                                 }
                         });
@@ -179,25 +173,24 @@
                             var validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
-                                return;
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url: [[@{/attendance/addAttendance}]],
+                                    url: "addAttendance",
                                 data: $("#addForm").serialize(),
                                     success: function(data){
                                     if(data.success){
                                         $.messager.alert("消息提醒",data.message,"info");
-                                        //关闭窗口
+                                        // 关闭窗口
                                         $("#addDialog").dialog("close");
-                                        //清空原表格数据
+
+                                        // 清空原表格数据
                                         $("#add_name").textbox('setValue', "");
-                                        //刷新
+
+                                        // 刷新
                                         $('#dataList').datagrid("reload");
                                     }else{
                                         $.messager.alert("消息提醒",data.message,"warning");
-                                        return;
-
                                     }
                                 }
                             });
@@ -215,16 +208,17 @@
                 ]
             });
 
-            //下拉框通用属性
+            // 下拉框通用属性
             $("#add_courseList,#courseList,#add_typeList").combobox({
                 width: "200",
                 height: "30",
                 valueField: "id",
                 textField: "name",
-                multiple: false, //不可多选
-                editable: false, //不可编辑
+                multiple: false,
+                editable: false,
                 method: "post",
             });
+
             $("#add_studentList,#studentList").combobox({
                 width: "200",
                 height: "30",
@@ -235,10 +229,9 @@
                 method: "post",
             });
 
-
             // 添加学生选择框
             $("#add_studentList").combobox({
-                url: [[@{/student/getStudentList(from=combox)}]],
+                url: "/student/getStudentList?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -252,9 +245,9 @@
 
             // 添加课程选择框
             $("#add_courseList").combobox({
-                url:/*[[@{/course/getCourseList(from=combox)}]]*/,
+                url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
-                    //默认选择第一条数据
+                    // 默认选择第一条数据
                     var data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
@@ -263,9 +256,9 @@
 
             // 学生选课列表
             function getStudentSelectedCourseList(sid){
-                //添加信息课程选择框
+                // 添加课程选择框
                 console.log("sid:", sid);
-                var u = [[@{/attendance/getStudentSelectedCourseList}]];
+                var u = "getStudentSelectedCourseList";
                 $("#add_courseList").combobox({
                     url:u+"?studentid="+sid,
                     onLoadSuccess: function(){
@@ -287,7 +280,7 @@
                 valueField: 'id',
                 textField: 'text',
                 onLoadSuccess: function(){
-                    //默认选择第一条数据
+                    // 默认选择第一条数据
                     var data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
@@ -309,36 +302,15 @@
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
-                    studentid: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
-                    courseid: $("#courseList").combobox('getValue') == '' ? 0 : $("#courseList").combobox('getValue'),
-                    type: $("#typeList").combobox('getValue') == '' ? '' : $("#typeList").combobox('getValue'),
+                    studentid: $("#studentList").combobox('getValue') === '' ? 0 : $("#studentList").combobox('getValue'),
+                    courseid: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue'),
+                    type: $("#typeList").combobox('getValue') === '' ? '' : $("#typeList").combobox('getValue'),
                     date:$("#date").datebox('getValue')
                 });
             });
         });
-        /*]]>*/
     </script>
-    <script type="text/javascript">
-        function myformatter(date){
-            var y = date.getFullYear();
-            var m = date.getMonth()+1;
-            var d = date.getDate();
-            return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
-        }
-        function myparser(s){
-            if (!s) return new Date();
-            var ss = (s.split('-'));
-            var y = parseInt(ss[0],10);
-            var m = parseInt(ss[1],10);
-            var d = parseInt(ss[2],10);
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
-                return new Date(y,m-1,d);
-            } else {
-                return new Date();
-            }
-        }
-    </script>
-</head>
+    </head>
 <body>
 <!-- 数据列表 -->
 <table id="dataList" cellspacing="0" cellpadding="0">
@@ -354,7 +326,7 @@
         学生：<input id="studentList" class="easyui-textbox" name="studentList" />
         课程：<input id="courseList" class="easyui-textbox" name="courseList" />
         类型：<input id="typeList" class="easyui-textbox" name="typeList" />
-        时间：<input id="date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" name="date" />
+        时间：<input id="date" class="easyui-datebox" name="date" />
         <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
         <a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
     </div>
@@ -388,6 +360,5 @@
         </table>
     </form>
 </div>
-
 </body>
 </html>

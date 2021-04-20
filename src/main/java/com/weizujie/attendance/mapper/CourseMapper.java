@@ -11,12 +11,6 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     Integer queryCount(Map<String, Object> paramMap);
 
-    int addCourse(Course course);
-
-    int editCourse(Course course);
-
-    int deleteCourse(List<Integer> ids);
-
     int addStudentNum(Integer courseId);
 
     void deleteStudentNum(Integer courseId);

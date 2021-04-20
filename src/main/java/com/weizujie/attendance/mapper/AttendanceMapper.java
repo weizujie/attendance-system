@@ -11,10 +11,4 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
     List<Attendance> queryList(Map<String, Object> paramMap);
 
     int queryCount(Map<String, Object> paramMap);
-
-    int addAttendance(Attendance attendance);
-
-    Attendance isAttendance(Attendance attendance);
-
-    int deleteAttendance(Integer id);
 }

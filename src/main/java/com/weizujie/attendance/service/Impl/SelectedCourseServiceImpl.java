@@ -42,7 +42,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int addSelectedCourse(SelectedCourse selectedCourse) {
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, selectedCourse.getStudentId())

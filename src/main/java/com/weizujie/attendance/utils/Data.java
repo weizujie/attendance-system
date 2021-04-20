@@ -2,6 +2,9 @@ package com.weizujie.attendance.utils;
 
 import java.util.List;
 
+/**
+ * @author weizujie
+ */
 public class Data {
     private List<Integer> ids ;
 

@@ -31,20 +31,4 @@
             <if test="date!=null">and date = #{date}</if>
         </where>
     </select>
-
-    <insert id="addAttendance" parameterType="com.weizujie.attendance.entity.Attendance">
-        insert into s_attendance(course_id,student_id,type,date)
-        values(#{courseId},#{studentId},#{type},#{date})
-    </insert>
-
-    <delete id="deleteAttendance" parameterType="long">
-        delete from s_attendance where id = #{id}
-    </delete>
-
-    <select id="isAttendance" parameterType="com.weizujie.attendance.entity.Attendance"
-            resultType="com.weizujie.attendance.entity.Attendance">
-        select * from s_attendance where course_id = #{courseId} and student_id = #{studentId} and type = #{type} and date = #{date}
-    </select>
-
-
 </mapper>

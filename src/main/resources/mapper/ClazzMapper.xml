@@ -24,26 +24,4 @@
         </where>
     </select>
 
-    <insert id="addClazz" parameterType="com.weizujie.attendance.entity.Clazz">
-        insert into s_clazz(name,info) values(#{name},#{info})
-    </insert>
-
-    <delete id="deleteClazz" parameterType="java.util.ArrayList">
-        delete from s_clazz
-        <where>
-            id in
-            <foreach collection="list" open="(" close=")" separator="," item="id">
-                #{id}
-            </foreach>
-        </where>
-    </delete>
-
-    <update id="editClazz" parameterType="com.weizujie.attendance.entity.Clazz">
-        update s_clazz set name = #{name},info = #{info} where id = #{id}
-    </update>
-
-    <select id="findByName" parameterType="String" resultType="com.weizujie.attendance.entity.Clazz">
-        select * from s_clazz where name = #{clazzName}
-    </select>
-
 </mapper>

@@ -37,7 +37,7 @@
         delete from s_selected_course where id = #{id}
     </delete>
 
-    <select id="findById" parameterType="long" resultMap="SelectedCourseInfo">
+    <select id="findById" parameterType="int" resultMap="SelectedCourseInfo">
         select  * from s_selected_course where id = #{id}
     </select>
 
@@ -53,7 +53,7 @@
         where student_id = #{id}
     </select>
 
-    <select id="getAllBySid" parameterType="long" resultMap="SelectedCourseInfo">
+    <select id="getAllBySid" parameterType="int" resultMap="SelectedCourseInfo">
         select * from s_selected_course
         where student_id = #{studentid}
     </select>
