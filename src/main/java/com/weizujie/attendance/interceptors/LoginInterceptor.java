@@ -13,6 +13,7 @@ import java.io.IOException;
 
 /**
  * 拦截器
+ *
  * @author weizujie
  */
 public class LoginInterceptor implements HandlerInterceptor {
@@ -22,14 +23,20 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+
         Admin user = (Admin) request.getSession().getAttribute(UserConstant.ADMIN);
+
         Teacher teacher = (Teacher) request.getSession().getAttribute(UserConstant.TEACHER);
+
         Student student = (Student) request.getSession().getAttribute(UserConstant.STUDENT);
+
         if (!StringUtils.isEmpty(user) || !StringUtils.isEmpty(teacher) || !StringUtils.isEmpty(student)) {
             return true;
         }
 
-        response.sendRedirect(request.getContextPath() + "/system/login");
+        String path = request.getContextPath();
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+        response.sendRedirect(basePath + "system/login");
         return false;
     }
 
