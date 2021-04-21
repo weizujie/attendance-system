@@ -4,6 +4,7 @@ import com.weizujie.attendance.entity.Admin;
 import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.constants.UserConstant;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
  *
  * @author weizujie
  */
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     /**

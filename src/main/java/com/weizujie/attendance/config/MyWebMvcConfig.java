@@ -21,7 +21,8 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
+        LoginInterceptor loginInterceptor = new LoginInterceptor();
+        registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/system/login", "/easyui/**", "/h-ui/**");
     }
