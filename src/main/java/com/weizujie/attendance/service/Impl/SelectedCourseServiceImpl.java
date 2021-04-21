@@ -91,4 +91,9 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
         System.out.println(selectedCourses.toString());
         return selectedCourseMapper.getAllBySid(studentid);
     }
+
+    @Override
+    public Course getCourseDetail(Integer studentId, Integer courseId) {
+        return selectedCourseMapper.getCourseDetail(studentId, courseId);
+    }
 }

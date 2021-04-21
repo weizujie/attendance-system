@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh_CN">
 <head>
     <meta charset="UTF-8">
     <title>选课列表</title>
@@ -11,7 +11,6 @@
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
         $(function() {
-            //datagrid初始化
             $('#dataList').datagrid({
                 title:'考勤列表',
                 iconCls:'icon-more',
@@ -112,30 +111,19 @@
                 $("#addDialog").dialog("open");
             });
 
-            // 设置编辑按钮
+            // 补签
             $("#edit").click(function(){
-                table = $("#editTable");
-                var selectRows = $("#dataList").datagrid("getSelections");
-                if(selectRows.length !== 1){
-                    $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
-                } else{
-                    $("#editDialog").dialog("open");
-                }
-            });
-
-
-            // 删除
-            $("#delete").click(function(){
                 var selectRow = $("#dataList").datagrid("getSelected");
+                console.log(selectRow);
                 if(selectRow == null){
-                    $.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
+                    $.messager.alert("消息提醒", "请选择数据进行补签!", "warning");
                 } else{
                     var id = selectRow.id;
-                    $.messager.confirm("消息提醒", "将删除与课程相关的所有数据，确认继续？", function(r){
+                    $.messager.confirm("消息提醒", "若签到类型为补签，可能会出现错误，确认继续？", function(r){
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: "deleteAttendance",
+                                url: "reissue",
                                 data: {id: id},
                                 success: function(data){
                                     if(data.success){
@@ -152,7 +140,7 @@
                 }
             });
 
-            //设置添加窗口
+            // 设置添加窗口
             $("#addDialog").dialog({
                 title: "添加考勤",
                 width: 450,
@@ -270,35 +258,6 @@
                 });
             }
 
-            // 签到类型
-            var typeData = [
-                {id:"上午", text:"上午"},
-                {id:"下午", text:"下午"}
-            ];
-            $("#add_typeList").combobox({
-                data:typeData,
-                valueField: 'id',
-                textField: 'text',
-                onLoadSuccess: function(){
-                    // 默认选择第一条数据
-                    var data = $(this).combobox("getData");
-                    $(this).combobox("setValue", data[0].id);
-                }
-            });
-
-            $("#typeList").combobox({
-                data:typeData,
-                valueField: 'id',
-                textField: 'text',
-                width: "80",
-                height: "25",
-                onLoadSuccess: function(){
-                    //默认选择第一条数据
-                    //var data = $(this).combobox("getData");
-                    //$(this).combobox("setValue", data[0].id);
-                }
-            });
-
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
@@ -310,17 +269,18 @@
             });
         });
     </script>
-    </head>
+</head>
 <body>
 <!-- 数据列表 -->
-<table id="dataList" cellspacing="0" cellpadding="0">
+<table id="dataList" cellspacing="0" cellpadding="0"></table>
 
-</table>
 <!-- 工具栏 -->
 <div id="toolbar">
     <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">签到</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
-    <div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
+    <div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left; margin-right: 10px;">
+        <a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">补签</a>
+    </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
         学生：<input id="studentList" class="easyui-textbox" name="studentList" />
@@ -351,10 +311,6 @@
                 <td style="width:80px"></td>
             </tr>
             <tr>
-                <td style="width:40px">类型:</td>
-                <td colspan="3">
-                    <input id="add_typeList" style="width: 200px; height: 30px;" class="easyui-textbox" name="type" data-options="required:true, missingMessage:'请选择类型'" />
-                </td>
                 <td style="width:80px"></td>
             </tr>
         </table>

@@ -1,8 +1,6 @@
 package com.weizujie.attendance.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,9 +31,9 @@ public class Attendance {
     private Integer studentId;
 
     /**
-     * 签到类型：上午/下午
+     * 签到类型：正常/迟到/补签
      */
-    private String type;
+    private String type = "正常";
 
     /**
      * 签到时间
@@ -43,5 +41,11 @@ public class Attendance {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date date;
+
+    /**
+     * 逻辑删除
+     */
+    @TableLogic
+    private Integer isDeleted;
 
 }

@@ -13,12 +13,19 @@
     <select id="queryList" resultMap="AttendanceInfo">
         SELECT *
         from s_attendance
-        <where>
-            <if test="courseid!=null">and course_id = #{courseid}</if>
-            <if test="studentid!=null">and student_id = #{studentid}</if>
-            <if test="type!=null">and type = #{type}</if>
-            <if test="date!=null">and date = #{date}</if>
-        </where>
+        where id_deleted = 0
+        <if test="courseid != null">
+            and course_id = #{courseid}
+        </if>
+        <if test="studentid != null">
+            and student_id = #{studentid}
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="date != null">
+            and date = #{date}
+        </if>
         limit #{startIndex},#{pagesize}
     </select>
 
@@ -31,4 +38,8 @@
             <if test="date!=null">and date = #{date}</if>
         </where>
     </select>
+
+    <update id="reissue">
+        update s_attendance set type = '补签' where id = #{attendanceId}
+    </update>
 </mapper>
