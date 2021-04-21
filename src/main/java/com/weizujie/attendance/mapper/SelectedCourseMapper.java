@@ -1,7 +1,9 @@
 package com.weizujie.attendance.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.entity.SelectedCourse;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +24,6 @@ public interface SelectedCourseMapper extends BaseMapper<SelectedCourse> {
     List<SelectedCourse> isStudentId(Integer id);
 
     List<SelectedCourse> getAllBySid(Integer studentid);
+
+    Course getCourseDetail(@Param("studentId") Integer studentId, @Param("courseId") Integer courseId);
 }

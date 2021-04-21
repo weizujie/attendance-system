@@ -8,6 +8,7 @@ import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.AttendanceService;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.service.SelectedCourseService;
+import com.weizujie.attendance.utils.DateFormatUtil;
 import com.weizujie.attendance.utils.PageBean;
 import com.weizujie.attendance.utils.R;
 import org.springframework.stereotype.Controller;
@@ -113,26 +114,38 @@ public class AttendanceController {
     @ResponseBody
     public R<Boolean> addAttendance(Attendance attendance) {
         // 判断是否已签到
-        if (attendanceService.checkAttendance(attendance)) {
+        boolean checkAttendance = attendanceService.checkAttendance(attendance);
+        if (checkAttendance) {
             // true 为已签到
-            return R.success("已签到，请勿重复签到");
+            return R.fail("已签到，请勿重复签到");
         } else {
-            int count = attendanceService.addAttendance(attendance);
-            if (count > 0) {
-                return R.success();
-            } else {
-                return R.fail();
+            Course course = selectedCourseService.getCourseDetail(attendance.getStudentId(), attendance.getCourseId());
+            if (Objects.nonNull(course)) {
+                // 获取选择签到的课程的上课时间
+                Date courseDate = DateFormatUtil.strToDate(course.getCourseDate());
+                // 学生签到时间减 15 分钟大于上课时间则为迟到
+                Calendar nowTime = Calendar.getInstance();
+                nowTime.add(Calendar.MINUTE, -15);
+                if (nowTime.getTime().after(courseDate)) {
+                    attendance.setType("迟到");
+                }
+                // 保存签到信息
+                int count = attendanceService.addAttendance(attendance);
+                if (count > 0) {
+                    return R.success();
+                }
             }
+            return R.fail();
         }
     }
 
     /**
-     * 删除考勤签到
+     * 补签
      */
-    @PostMapping("/deleteAttendance")
+    @PostMapping("/reissue")
     @ResponseBody
-    public R<Boolean> deleteAttendance(Integer id) {
-        int count = attendanceService.deleteAttendance(id);
+    public R<Boolean> reissue(Integer id) {
+        int count = attendanceService.reissue(id);
         if (count > 0) {
             return R.success();
         } else {

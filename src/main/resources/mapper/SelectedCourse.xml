@@ -57,4 +57,11 @@
         select * from s_selected_course
         where student_id = #{studentid}
     </select>
+
+    <select id="getCourseDetail" resultType="com.weizujie.attendance.entity.Course">
+        select s.username ,c.name, c.course_date from s_course c
+        left join s_selected_course sc on sc.course_id = c.id
+        left join s_student s on s.id = sc.student_id
+        where s.id = #{studentId} and c.id = #{courseId}
+    </select>
 </mapper>
