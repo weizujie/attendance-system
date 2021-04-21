@@ -14,11 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MyWebMvcConfig implements WebMvcConfigurer {
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/login");
-    }
-
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
 
@@ -28,11 +23,6 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/",
-                        "/system/login",
-                        "/easyui/**",
-                        "/h-ui/**"
-                );
+                .excludePathPatterns("/", "/system/login", "/easyui/**", "/h-ui/**");
     }
 }
