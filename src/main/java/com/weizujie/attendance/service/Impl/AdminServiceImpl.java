@@ -44,4 +44,16 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.updateById(admin);
     }
 
+    /**
+     * 根据用户名获取管理员信息
+     * @param username 用户名
+     * @return 管理员信息
+     */
+    @Override
+    public Admin getByUsername(String username) {
+        LambdaQueryWrapper<Admin> wrapper = new LambdaQueryWrapper<Admin>()
+                .eq(Admin::getUsername, username);
+        return adminMapper.selectOne(wrapper);
+    }
+
 }

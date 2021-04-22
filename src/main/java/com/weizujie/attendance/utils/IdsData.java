@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author weizujie
  */
-public class Data {
+public class IdsData {
     private List<Integer> ids ;
 
     public List<Integer> getIds() {

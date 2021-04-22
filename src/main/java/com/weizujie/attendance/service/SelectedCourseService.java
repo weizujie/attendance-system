@@ -14,7 +14,7 @@ public interface SelectedCourseService {
 
     int deleteSelectedCourse(Integer id);
 
-    boolean isStudentId(Integer studentId);
+    boolean checkSelectedCourse(Integer studentId);
 
     List<SelectedCourse> getAllBySid(Integer studentId);
 

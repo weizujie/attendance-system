@@ -81,7 +81,7 @@
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: "/student/getStudentList?from=combox",
+                    url: "/student/list?from=combox",
 
                 });
                 $("#courseList").combobox({
@@ -219,7 +219,7 @@
 
             // 添加学生选择框
             $("#add_studentList").combobox({
-                url: "/student/getStudentList?from=combox",
+                url: "/student/list?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -278,7 +278,7 @@
 <div id="toolbar">
     <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">签到</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
-    <div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left; margin-right: 10px;">
+    <div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
         <a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">补签</a>
     </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>

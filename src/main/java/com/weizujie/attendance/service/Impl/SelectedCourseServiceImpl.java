@@ -76,7 +76,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     }
 
     @Override
-    public boolean isStudentId(Integer studentId) {
+    public boolean checkSelectedCourse(Integer studentId) {
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, studentId);
         List<SelectedCourse> selectedCourseList = selectedCourseMapper.selectList(wrapper);

@@ -20,4 +20,5 @@ public interface UserConstant {
 
     String TEACHER_CODE = "3";
 
+    String LOGIN_USER = "loginUser";
 }

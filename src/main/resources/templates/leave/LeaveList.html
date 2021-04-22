@@ -82,7 +82,7 @@
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: [[@{/student/getStudentList(from=combox)}]],
+                    url: "/student/list?from=combox",
                     onChange: function(newValue, oldValue){
                         //加载班级下的学生
                         //$('#dataList').datagrid("options").queryParams = {clazzid: newValue};
@@ -390,20 +390,22 @@
                 editable: false, //不可编辑
                 method: "post",
             });
-            //添加信息学生选择框
+
+            // 添加信息学生选择框
             $("#add_studentList").combobox({
-                url: [[@{/student/getStudentList(from=combox)}]],
+                url: "/student/list?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });
-            //编辑信息学生选择框
+
+            // 编辑信息学生选择框
             $("#edit_studentList").combobox({
-                url: [[@{/student/getStudentList(from=combox)}]],
+                url: "/student/list?from=combox",
                 onLoadSuccess: function(){
-                    //默认选择第一条数据
+                    // 默认选择第一条数据
                     var data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
@@ -432,10 +434,10 @@
 </table>
 <!-- 工具栏 -->
 <div id="toolbar">
-    <div th:if="${session.usertype == '2'}" style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
+    <div th:if="${session.loginUser.userType == '2'}" style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
-    <div th:if="${session.usertype == '2'}" style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
-    <div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;"><a id="check" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">审核</a></div>
+    <div th:if="${session.loginUser.userType == '2'}" style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
+    <div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;"><a id="check" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">审核</a></div>
     <div style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">

@@ -3,12 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>教师列表</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/easyui/css/demo.css}">
-	<script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
-	<script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/themes/default/easyui.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/themes/icon.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/css/demo.css}">
+	<script type="text/javascript" th:src="@{/static/easyui/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/easyui/js/validateExtends.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		$(function() {
@@ -20,7 +20,7 @@
 				collapsible:false,
 				fit: true,
 				method: "post",
-				url: "getTeacherList",
+				url: "/teacher/list",
 				idField:'id',
 				singleSelect:false,//是否单选
 				pagination:true,//分页控件
@@ -351,15 +351,15 @@
 </table>
 <!-- 工具栏 -->
 <div id="toolbar">
-	<div th:if="${session.usertype == '1'}" style="float: left;">
+	<div th:if="${session.loginUser.userType == '1'}" style="float: left;">
 		<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
 	</div>
-	<div th:if="${session.usertype == '1'}" style="float: left;" class="datagrid-btn-separator"></div>
+	<div th:if="${session.loginUser.userType == '1'}" style="float: left;" class="datagrid-btn-separator"></div>
 	<div style="float: left;">
 		<a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
 	</div>
 	<div style="float: left;" class="datagrid-btn-separator"></div>
-	<div th:if="${session.usertype == '1'}" style="float: left;">
+	<div th:if="${session.loginUser.userType == '1'}" style="float: left;">
 		<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
 	</div>
 	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >

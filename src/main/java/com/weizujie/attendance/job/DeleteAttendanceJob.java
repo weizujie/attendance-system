@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * 清空学生考勤的定时任务
- * @author weizujie
  * EnableScheduling: 开启定时任务注解
+ * @author weizujie
  */
 @Slf4j
 @Configuration
@@ -30,7 +30,7 @@ public class DeleteAttendanceJob {
     /**
      * 每周星期天凌晨一点执行一次
      */
-    @Scheduled(cron = "0 0 1 ? * L")
+    @Scheduled(cron = "0 0 1 ? * MON")
     private void job() {
         log.info("开始执行【清空学生考勤】定时任务");
         // 获取所有学生的考勤

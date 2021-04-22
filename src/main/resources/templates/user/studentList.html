@@ -10,9 +10,7 @@
 	<script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
 	<script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
 		$(function() {
-			//datagrid初始化
 			$('#dataList').datagrid({
 				title:'学生列表',
 				iconCls:'icon-more',//图标
@@ -20,7 +18,7 @@
 				collapsible:false,//是否可折叠的
 				fit: true,//自动大小
 				method: "post",
-				url: "getStudentList",
+				url: "/student/list",
 				idField:'id',
 				singleSelect:false,//是否单选
 				pagination:true,//分页控件
@@ -36,16 +34,16 @@
 					{field:'nickName',title:'姓名',width:150},
 					{field:'sex',title:'性别',width:100},
 					{field:'mobile',title:'联系方式',width:150},
-					{field:'clazz_id',title:'专业',width:150,
+					{field:'classId',title:'专业',width:150,
 						formatter: function(value,row,index){
-							if (row.clazzId){
+							if (row.classId){
 								var clazzList = $("#clazzList").combobox("getData");
 								for(var i=0;i<clazzList.length;i++ ){
-									if(row.clazzId === clazzList[i].id) {
+									if(row.classId === clazzList[i].id) {
 										return clazzList[i].name;
 									}
 								}
-								return row.clazzId;
+								return row.classId;
 							} else {
 								return 'not found';
 							}
@@ -102,7 +100,7 @@
 						if(r){
 							$.ajax({
 								type: "post",
-								url: "deleteStudent",
+								url: "/user/delete",
 								data:jsonObj,
 								success: function(data){
 									if(data.success){
@@ -186,11 +184,11 @@
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
 							} else{
-								var clazzid = $("#add_clazzList").combobox("getValue");
+								var classId = $("#add_clazzList").combobox("getValue");
 								var formData = new FormData($( "#addForm" )[0]);
 								$.ajax({
 									type: "post",
-									url: "addStudent",
+									url: "/user/add",
 									data: formData,
 									async: false,
 									cache: false,
@@ -208,11 +206,12 @@
 											$("#add_sex").textbox('setValue', "男");
 											$("#add_phone").textbox('setValue', "");
 
+
 											//重新刷新页面数据
-											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
+											$('#dataList').datagrid("options").queryParams = {classId: classId};
 											$('#dataList').datagrid("reload");
 											setTimeout(function(){
-												$("#clazzList").combobox('setValue', clazzid);
+												$("#clazzList").combobox('setValue', classId);
 											}, 100);
 
 										} else{
@@ -259,14 +258,14 @@
 						iconCls:'icon-user_add',
 						handler:function(){
 							var validate = $("#editForm").form("validate");
-							var clazzid = $("#edit_clazzList").combobox("getValue");
+							var classId = $("#edit_clazzList").combobox("getValue");
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
 							} else {
 								var formData = new FormData($('#editForm')[0]);
 								$.ajax({
 									type: "put",
-									url: "editStudent",
+									url: "/user/update",
 									data: formData,
 									async: false,
 									cache: false,
@@ -279,11 +278,11 @@
 											$("#editDialog").dialog("close");
 
 											// 刷新表格
-											$('#dataList').datagrid("options").queryParams = {clazzid: clazzid};
+											$('#dataList').datagrid("options").queryParams = {classId: classId};
 											$("#dataList").datagrid("reload");
 											$("#dataList").datagrid("uncheckAll");
 											setTimeout(function(){
-												$("#clazzList").combobox('setValue', clazzid);
+												$("#clazzList").combobox('setValue', classId);
 											}, 100);
 										} else{
 											$.messager.alert("消息提醒",data.message,"warning");
@@ -315,9 +314,9 @@
 					$("#edit_sex").textbox('setValue', selectRow.sex);
 					$("#edit_mobile").textbox('setValue', selectRow.mobile);
 					$("#edit-id").val(selectRow.id);
-					var clazzid = selectRow.clazzId;
+					var classId = selectRow.classId;
 					setTimeout(function(){
-						$("#edit_clazzList").combobox('setValue', clazzid);
+						$("#edit_clazzList").combobox('setValue', classId);
 					}, 100);
 				}
 			});
@@ -326,7 +325,7 @@
 			$("#search-btn").click(function(){
 				$('#dataList').datagrid('load',{
 					studentName: $('#search_student_name').val(),
-					clazzid: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
+					classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 				});
 			});
 		});
@@ -339,21 +338,21 @@
 </table>
 <!-- 工具栏 -->
 <div id="toolbar">
-	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;">
+	<div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;">
 		<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
 	</div>
-	<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
+	<div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
 	<div style="float: left;">
 		<a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
 	</div>
 	<div style="float: left;" class="datagrid-btn-separator"></div>
-		<div th:if="${session.usertype == '1' || session.usertype == '3'}" style="float: left;">
+		<div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;">
 			<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
 		</div>
 	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
 		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" /></div>
 	<div style="margin-left: 10px;margin-top:4px;" >
-		专业：<input id="clazzList" class="easyui-textbox" name="clazz" />
+		专业：<input id="clazzList" class="easyui-textbox" name="class" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
 	</div>
 </div>
@@ -361,6 +360,7 @@
 <!-- 添加学生窗口 -->
 <div id="addDialog" style="padding: 10px">
 	<form id="addForm" method="post" enctype="multipart/form-data">
+		<input id="add_userType" name="userType" value="2" type="hidden" />
 		<table cellpadding="8" >
 			<tr>
 				<td>学号:</td>
@@ -388,7 +388,7 @@
 			</tr>
 			<tr>
 				<td>专业:</td>
-				<td><input id="add_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="clazzId" /></td>
+				<td><input id="add_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" /></td>
 			</tr>
 		</table>
 	</form>
@@ -413,7 +413,7 @@
 			</tr>
 			<tr>
 				<td>专业:</td>
-				<td><input id="edit_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="clazzId" /></td>
+				<td><input id="edit_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" /></td>
 			</tr>
 		</table>
 	</form>

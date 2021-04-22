@@ -15,9 +15,15 @@
         SELECT *
         from s_teacher
         <where>
-            <if test="username!=null">and username LIKE concat("%",#{username},"%")</if>
-            <if test="clazzid!=null">and clazz_id LIKE concat("%",#{clazzid},"%")</if>
-            <if test="teacherid!=null">and id = #{teacherid}</if>
+            <if test="username != null">
+            and username LIKE concat("%",#{username},"%")
+            </if>
+            <if test="clazzid != null">
+            and clazz_id LIKE concat("%",#{clazzid},"%")
+            </if>
+            <if test="teacherId != null">
+            and id = #{teacherId}
+            </if>
         </where>
         limit #{startIndex},#{pagesize}
     </select>

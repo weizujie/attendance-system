@@ -19,10 +19,5 @@ public class LoginDTO {
      */
     private String password;
 
-    /**
-     * 用户类型
-     */
-    private String type;
-
 }
 

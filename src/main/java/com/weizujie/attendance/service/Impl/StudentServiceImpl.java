@@ -36,7 +36,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int deleteStudent(List<Integer> ids) {
         return studentMapper.deleteBatchIds(ids);
-        // return .deleteStudent(ids);
     }
 
     @Override

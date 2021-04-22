@@ -21,4 +21,11 @@ public interface AdminService {
      * @return 影响条数
      */
     int editPswdByAdmin(Admin admin);
+
+    /**
+     * 根据用户名获取管理员信息
+     * @param username 用户名
+     * @return 管理员信息
+     */
+    Admin getByUsername(String username);
 }

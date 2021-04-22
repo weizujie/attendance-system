@@ -20,7 +20,7 @@
                 collapsible: false,//是否可折叠的
                 fit: true,//自动大小
                 method: "post",
-                url:[[@{/selectedCourse/getSelectedCourseList}]],
+                url: "/selectedCourse/getSelectedCourseList",
                 idField:'id',
                 singleSelect: true,//是否单选
                 pagination: true,//分页控件
@@ -51,8 +51,7 @@
                             if (row.courseId){
                                 var courseList = $("#courseList").combobox("getData");
                                 for(var i=0;i<courseList.length;i++ ){
-                                    //console.log(clazzList[i]);
-                                    if(row.courseId == courseList[i].id)return courseList[i].name;
+                                    if(row.courseId === courseList[i].id)return courseList[i].name;
                                 }
                                 return row.courseId;
                             } else {
@@ -64,14 +63,10 @@
             ],
                 toolbar: "#toolbar",
                 onBeforeLoad : function(){
-                    // try{
-                    //     $("#studentList").combobox("getData")
-                    // }catch(err){
-                    //     preLoadClazz();
-                    // }
                     preLoadClazz();
                 }
             });
+
             //提前加载学生和课程信息
             function preLoadClazz(){
                 $("#studentList").combobox({
@@ -79,12 +74,13 @@
                     height: "25",
                     valueField: "id",
                     textField: "username",
-                    multiple: false, //可多选
-                    editable: false, //不可编辑
+                    multiple: false,
+                    editable: false,
                     method: "post",
-                    url: [[@{/student/getStudentList(from=combox)}]],
+                    url: "/student/list?from=combox",
 
                 });
+
                 $("#courseList").combobox({
                     width: "150",
                     height: "25",
@@ -117,7 +113,7 @@
             $("#edit").click(function(){
                 table = $("#editTable");
                 var selectRows = $("#dataList").datagrid("getSelections");
-                if(selectRows.length != 1){
+                if(selectRows.length !== 1){
                     $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
                 } else{
                     $("#editDialog").dialog("open");
@@ -136,18 +132,17 @@
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: [[@{/selectedCourse/deleteSelectedCourse}]],
+                                url: "/selectedCourse/deleteSelectedCourse",
                                 data: {id: id},
                                 success: function(msg){
-                                    if(msg == "success"){
+                                    if(msg === "success"){
                                         $.messager.alert("消息提醒","删除成功!","info");
                                         //刷新表格
                                         $("#dataList").datagrid("reload");
-                                    }else if(msg == "not found"){
+                                    }else if(msg === "not found"){
                                         $.messager.alert("消息提醒","不存在该选课记录!","info");
                                     }else{
                                         $.messager.alert("消息提醒","删除失败!","warning");
-                                        return;
                                     }
                                 }
                             });
@@ -177,7 +172,6 @@
                             var validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
-                                return;
                             } else{
                                 $.ajax({
                                     type: "post",
@@ -234,9 +228,9 @@
             });
 
 
-            //添加信息学生选择框
+            // 添加信息学生选择框
             $("#add_studentList").combobox({
-                url: [[@{/student/getStudentList(from=combox)}]],
+                url: "/student/list?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -244,7 +238,7 @@
                 }
             });
 
-            //添加信息课程选择框
+            // 添加信息课程选择框
             $("#add_courseList").combobox({
                 url: [[@{/course/getCourseList(from=combox)}]],
                 onLoadSuccess: function(){

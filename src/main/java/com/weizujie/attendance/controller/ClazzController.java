@@ -4,9 +4,8 @@ import com.weizujie.attendance.entity.Clazz;
 import com.weizujie.attendance.service.ClazzService;
 import com.weizujie.attendance.service.StudentService;
 import com.weizujie.attendance.utils.R;
-import com.weizujie.attendance.utils.Data;
+import com.weizujie.attendance.utils.IdsData;
 import com.weizujie.attendance.utils.PageBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +80,7 @@ public class ClazzController {
      */
     @PostMapping("/deleteClazz")
     @ResponseBody
-    public R<Boolean> deleteClazz(Data data) {
+    public R<Boolean> deleteClazz(IdsData data) {
         List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
         for (Integer id : ids) {

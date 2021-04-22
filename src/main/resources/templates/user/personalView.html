@@ -23,7 +23,6 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src='@{/easyui/js/validateExtends.js}'> </script>
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
         $(function() {
             //修改密码窗口
             $("#passwordDialog").dialog({
@@ -45,19 +44,18 @@
                             var validate = $("#editPassword").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
-                                return;
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url:/*[[@{/system/editPassword}]]*/,
+                                    url: "/user/password",
                                     data: $("#editPassword").serialize(),
                                     success: function(data){
                                         if(data.success){
                                             $.messager.alert("消息提醒",data.message,"info")
                                             setTimeout(function(){
-                                                top.location.href =/*[[@{/system/logout}]]*/;
+                                                top.location.href = "/system/logout";
                                             }, 1000);
-                                        }else{
+                                        } else {
                                             $.messager.alert("消息提醒",data.message,"error")
                                         }
                                     }
@@ -76,9 +74,9 @@
                         }
                     }
                 ],
-            })
+            });
 
-            //设置编辑学生窗口
+            // 设置修改密码窗口
             $("#editDialog").dialog({
                 title: "修改密码",
                 width: 500,
@@ -100,24 +98,17 @@
                             $("#passwordDialog").dialog("open");
                         }
                     }
-                ],
-
+                ]
             });
-
             setTimeout(function(){
                 $("#passwordDialog").dialog("open");
             },1000);
-
-
         })
-        /*]]>*/
     </script>
 </head>
 <body>
 
-<div id="editDialog" style="padding: 20px;">
-
-</div>
+<div id="editDialog" style="padding: 20px;"></div>
 
 <!-- 修改密码窗口 -->
 <div id="passwordDialog" style="padding: 20px">
@@ -142,6 +133,5 @@
         </table>
     </form>
 </div>
-
 </body>
 </html>

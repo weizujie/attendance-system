@@ -3,9 +3,8 @@ package com.weizujie.attendance.controller;
 import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.utils.R;
-import com.weizujie.attendance.utils.Data;
+import com.weizujie.attendance.utils.IdsData;
 import com.weizujie.attendance.utils.PageBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -89,7 +88,7 @@ public class CourseController {
 
     @PostMapping("/deleteCourse")
     @ResponseBody
-    public R<Boolean> deleteCourse(Data data) {
+    public R<Boolean> deleteCourse(IdsData data) {
         int count = courseService.deleteCourse(data.getIds());
         if (count > 0) {
             return R.success();
