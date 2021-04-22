@@ -11,6 +11,7 @@
 - MyBatis-Plus
 - MySQL 8.0
 - Maven
+- Shiro
 
 ## 说明
 
