@@ -18,7 +18,7 @@
                 collapsible: false,
                 fit: true,
                 method: "post",
-                url: "getAttendanceList",
+                url: "/attendance/getAttendanceList",
                 idField:'id',
                 singleSelect: true,
                 pagination: true,
@@ -164,7 +164,7 @@
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url: "addAttendance",
+                                    url: "/attendance/addAttendance",
                                 data: $("#addForm").serialize(),
                                     success: function(data){
                                     if(data.success){
@@ -248,7 +248,7 @@
                 console.log("sid:", sid);
                 var u = "getStudentSelectedCourseList";
                 $("#add_courseList").combobox({
-                    url:u+"?studentid="+sid,
+                    url:u+"?studentId="+sid,
                     onLoadSuccess: function(){
                         // 默认选择第一条数据
                         var data = $(this).combobox("getData");

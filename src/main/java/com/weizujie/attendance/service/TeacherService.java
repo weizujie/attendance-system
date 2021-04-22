@@ -1,7 +1,6 @@
 package com.weizujie.attendance.service;
 
 import com.weizujie.attendance.dto.LoginDTO;
-import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.utils.PageBean;
 
 import java.util.List;

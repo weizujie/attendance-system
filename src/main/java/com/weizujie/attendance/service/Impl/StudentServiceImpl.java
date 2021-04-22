@@ -2,11 +2,9 @@ package com.weizujie.attendance.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weizujie.attendance.dto.LoginDTO;
-import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.mapper.StudentMapper;
 import com.weizujie.attendance.service.StudentService;
 import com.weizujie.attendance.utils.PageBean;
-import com.weizujie.attendance.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

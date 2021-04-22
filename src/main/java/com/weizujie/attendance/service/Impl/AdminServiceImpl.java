@@ -1,12 +1,9 @@
 package com.weizujie.attendance.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.weizujie.attendance.dto.LoginDTO;
-import com.weizujie.attendance.entity.Admin;
 import com.weizujie.attendance.mapper.AdminMapper;
 import com.weizujie.attendance.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**

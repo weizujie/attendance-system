@@ -1,7 +1,6 @@
 package com.weizujie.attendance.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.weizujie.attendance.entity.Teacher;
 
 import java.util.List;
 import java.util.Map;

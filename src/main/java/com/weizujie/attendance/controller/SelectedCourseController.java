@@ -2,11 +2,9 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.SelectedCourse;
-import com.weizujie.attendance.entity.Student;
 import com.weizujie.attendance.service.SelectedCourseService;
 import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.PageBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;

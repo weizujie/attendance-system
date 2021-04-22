@@ -2,7 +2,6 @@ package com.weizujie.attendance.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weizujie.attendance.dto.LoginDTO;
-import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.mapper.TeacherMapper;
 import com.weizujie.attendance.service.TeacherService;
 import com.weizujie.attendance.utils.PageBean;

@@ -4,7 +4,7 @@ import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Attendance;
 import com.weizujie.attendance.entity.Course;
 import com.weizujie.attendance.entity.SelectedCourse;
-import com.weizujie.attendance.entity.Student;
+import com.weizujie.attendance.entity.User;
 import com.weizujie.attendance.service.AttendanceService;
 import com.weizujie.attendance.service.CourseService;
 import com.weizujie.attendance.service.SelectedCourseService;
@@ -48,18 +48,19 @@ public class AttendanceController {
     @ResponseBody
     public Object getAttendanceList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                     @RequestParam(value = "rows", defaultValue = "100") Integer rows,
-                                    @RequestParam(value = "studentid", defaultValue = "0") String studentid,
-                                    @RequestParam(value = "courseid", defaultValue = "0") String courseid,
+                                    @RequestParam(value = "studentId", defaultValue = "0") String studentId,
+                                    @RequestParam(value = "courseId", defaultValue = "0") String courseId,
                                     String type, String date, String from, HttpSession session) {
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!"0".equals(studentid)) {
-            paramMap.put("studentid", studentid);
+
+        if (!"0".equals(studentId)) {
+            paramMap.put("studentId", studentId);
         }
-        if (!"0".equals(courseid)) {
-            paramMap.put("courseid", courseid);
+        if (!"0".equals(courseId)) {
+            paramMap.put("courseId", courseId);
         }
         if (!StringUtils.isEmpty(type)) {
             paramMap.put("type", type);
@@ -68,10 +69,10 @@ public class AttendanceController {
             paramMap.put("date", date);
         }
 
-        Student student = (Student) session.getAttribute(UserConstant.STUDENT);
-        if (!StringUtils.isEmpty(student)) {
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        if (UserConstant.LOGIN_USER.equals(loginUser.getUserType())) {
             // 学生用户，只能查询自己的信息
-            paramMap.put("studentid", student.getId());
+            paramMap.put("studentId", loginUser.getId());
         }
 
         PageBean<Attendance> pageBean = attendanceService.queryPage(paramMap);

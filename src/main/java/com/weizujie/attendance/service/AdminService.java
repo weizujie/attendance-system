@@ -1,7 +1,6 @@
 package com.weizujie.attendance.service;
 
 import com.weizujie.attendance.dto.LoginDTO;
-import com.weizujie.attendance.entity.Admin;
 
 /**
  * @author weizujie

@@ -1,13 +1,9 @@
 package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.constants.UserConstant;
-import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.entity.User;
-import com.weizujie.attendance.service.TeacherService;
 import com.weizujie.attendance.service.UserService;
-import com.weizujie.attendance.utils.IdsData;
 import com.weizujie.attendance.utils.PageBean;
-import com.weizujie.attendance.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;

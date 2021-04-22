@@ -14,11 +14,11 @@
         SELECT *
         from s_attendance
         where id_deleted = 0
-        <if test="courseid != null">
-            and course_id = #{courseid}
+        <if test="courseId != null">
+            and course_id = #{courseId}
         </if>
-        <if test="studentid != null">
-            and student_id = #{studentid}
+        <if test="studentId != null">
+            and student_id = #{studentId}
         </if>
         <if test="type != null">
             and type = #{type}
@@ -32,10 +32,18 @@
     <select id="queryCount" resultType="int">
         select count(*) from s_attendance
         <where>
-            <if test="courseid!=null">and course_id = #{courseid}</if>
-            <if test="studentid!=null">and student_id = #{studentid}</if>
-            <if test="type!=null">and type = #{type}</if>
-            <if test="date!=null">and date = #{date}</if>
+            <if test="courseId!=null">
+            and course_id = #{courseId}
+            </if>
+            <if test="studentId!=null">
+            and student_id = #{studentId}
+            </if>
+            <if test="type!=null">
+            and type = #{type}
+            </if>
+            <if test="date!=null">
+            and date = #{date}
+            </if>
         </where>
     </select>
 
