@@ -71,7 +71,7 @@
                     multiple: false,
                     editable: false,
                     method: "post",
-                    url: "/teacher/getTeacherList?from=combox",
+                    url: "/teacher/list?from=combox",
                     onChange: function(newValue, oldValue){
                     }
 
@@ -297,7 +297,7 @@
             });
             // 添加教师选择框
             $("#add_teacherList").combobox({
-                url: "/teacher/getTeacherList?from=combox",
+                url: "/teacher/list?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -306,7 +306,7 @@
             });
             //编辑信息教师选择框
             $("#edit_teacherList").combobox({
-                url: "/teacher/getTeacherList?from=combox",
+                url: "/teacher/list?from=combox",
                 onLoadSuccess: function(){
                     // 默认选择第一条数据
                     var data = $(this).combobox("getData");

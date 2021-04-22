@@ -3,12 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>教师列表</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/themes/default/easyui.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/themes/icon.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/static/easyui/css/demo.css}">
-	<script type="text/javascript" th:src="@{/static/easyui/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/static/easyui/jquery.easyui.min.js}"></script>
-	<script type="text/javascript" th:src="@{/static/easyui/js/validateExtends.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/css/demo.css}">
+	<script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		$(function() {
@@ -35,14 +35,16 @@
 					{field:'username',title:'姓名',width:150},
 					{field:'sex',title:'性别',width:100},
 					{field:'mobile',title:'联系方式',width:150},
-					{field:'clazz_id',title:'专业',width:150,
+					{field:'classId',title:'专业',width:150,
 						formatter: function(value,row,index){
-							if (row.clazzId){
+							if (row.classId){
 								var clazzList = $("#clazzList").combobox("getData");
 								for(var i=0;i<clazzList.length;i++ ){
-									if(row.clazzId === clazzList[i].id)return clazzList[i].name;
+									if(row.classId === clazzList[i].id){
+										return clazzList[i].name;
+									}
 								}
-								return row.clazzId;
+								return row.classId;
 							} else {
 								return 'not found';
 							}
@@ -59,6 +61,7 @@
 					}
 				}
 			});
+
 			//设置分页控件
 			var p = $('#dataList').datagrid('getPager');
 			$(p).pagination({
@@ -68,11 +71,13 @@
 				afterPageText: '页    共 {pages} 页',
 				displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
 			});
+
 			//设置工具类按钮
 			$("#add").click(function(){
 				table = $("#addTable");
 				$("#addDialog").dialog("open");
 			});
+
 			// 修改
 			$("#edit").click(function(){
 				table = $("#editTable");
@@ -84,6 +89,7 @@
 					$("#editDialog").dialog("open");
 				}
 			});
+
 			//删除
 			$("#delete").click(function(){
 				var selectRows = $("#dataList").datagrid("getSelections");
@@ -99,7 +105,7 @@
 						if(r){
 							$.ajax({
 								type: "post",
-								url: "deleteTeacher",
+								url: "/user/delete",
 								data: jsonObj,
 								success: function(data){
 									if(data.success){
@@ -158,7 +164,7 @@
 
 								$.ajax({
 									type: "post",
-									url: "addTeacher",
+									url: "/user/add",
 									data: formData,
 									async: false,
 									cache: false,
@@ -273,7 +279,7 @@
 								formData.append("id", id);
 								$.ajax({
 									type: "post",
-									url: "editTeacher",
+									url: "/user/update",
 									data: formData,
 									async: false,
 									cache: false,
@@ -322,9 +328,9 @@
 					$("#edit_phone").textbox('setValue', selectRow.mobile);
 
 					$("#edit-id").val(selectRow.id);
-					var clazzid = selectRow.clazzId;
+					var classId = selectRow.classId;
 					setTimeout(function(){
-						$("#edit_clazzList").combobox('setValue', clazzid);
+						$("#edit_clazzList").combobox('setValue', classId);
 					}, 100);
 				},
 				onClose: function(){
@@ -337,7 +343,7 @@
 			$("#search-btn").click(function(){
 				$('#dataList').datagrid('load',{
 					teacherName: $('#search_student_name').val(),
-					clazzid: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
+					classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 				});
 			});
 		});
@@ -366,7 +372,7 @@
 		&nbsp;&nbsp;姓名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" />
 	</div>
 	<div style="margin-left: 10px;margin-top:4px;" >
-		专业：<input id="clazzList" class="easyui-textbox" name="clazz" />
+		专业：<input id="clazzList" class="easyui-textbox" name="class" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
 	</div>
 </div>
@@ -374,11 +380,12 @@
 <!-- 添加窗口 -->
 <div id="addDialog" style="padding: 10px;">
 	<form id="addForm" method="post" enctype="multipart/form-data">
+		<input id="add_userType" name="userType" value="3" type="hidden" />
 		<table id="addTable" border=0 style="width:800px; table-layout:fixed;" cellpadding="6" >
 			<tr>
 				<td style="width:40px">专业:</td>
 				<td colspan="3">
-					<input id="add_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="clazzId" />
+					<input id="add_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" />
 				</td>
 				<td style="width:80px"></td>
 			</tr>
@@ -410,7 +417,7 @@
 			<tr>
 				<td style="width:40px">专业:</td>
 				<td colspan="3">
-					<input id="edit_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="clazzId" />
+					<input id="edit_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" />
 				</td>
 				<td style="width:80px"></td>
 			</tr>

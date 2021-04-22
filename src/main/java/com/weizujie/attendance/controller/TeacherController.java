@@ -4,6 +4,7 @@ import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.Teacher;
 import com.weizujie.attendance.entity.User;
 import com.weizujie.attendance.service.TeacherService;
+import com.weizujie.attendance.service.UserService;
 import com.weizujie.attendance.utils.IdsData;
 import com.weizujie.attendance.utils.PageBean;
 import com.weizujie.attendance.utils.R;
@@ -23,18 +24,16 @@ import java.util.Map;
 public class TeacherController {
 
     @Autowired
-    private TeacherService teacherService;
-
+    private UserService userService;
 
     /**
      * 异步加载老师数据列表
      */
     @PostMapping("/list")
-    @ResponseBody
     public Object getTeacherList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                  @RequestParam(value = "rows", defaultValue = "100") Integer rows,
-                                 String teacherName,
-                                 @RequestParam(value = "clazzid", defaultValue = "0") String clazzid, String from, HttpSession session) {
+                                 @RequestParam(value = "classId", defaultValue = "0") String classId,
+                                 String from, HttpSession session, String teacherName) {
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
@@ -44,8 +43,8 @@ public class TeacherController {
             paramMap.put("username", teacherName);
         }
 
-        if (!"0".equals(clazzid)) {
-            paramMap.put("clazzid", clazzid);
+        if (!"0".equals(classId)) {
+            paramMap.put("classId", classId);
         }
 
         // 获取登录用户的用户类型
@@ -55,7 +54,7 @@ public class TeacherController {
             paramMap.put("teacherId", loginUser.getId());
         }
 
-        PageBean<Teacher> pageBean = teacherService.queryPage(paramMap);
+        PageBean<User> pageBean = userService.getTeacherPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
@@ -63,20 +62,6 @@ public class TeacherController {
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
             return result;
-        }
-    }
-
-    /**
-     * 删除教师
-     */
-    @PostMapping("/deleteTeacher")
-    @ResponseBody
-    public R<Boolean> deleteTeacher(IdsData data) {
-        int count = teacherService.deleteTeacher(data.getIds());
-        if (count > 0) {
-            return R.success();
-        } else {
-            return R.fail();
         }
     }
 }

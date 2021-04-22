@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weizujie.attendance.mapper.UserMapper">
+
+    <resultMap type="com.weizujie.attendance.entity.User" id="UserInfo">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="class_id" property="classId"/>
+        <result column="sex" property="sex"/>
+        <result column="mobile" property="mobile"/>
+        <result column="create_date" property="createDate"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <select id="queryList" resultMap="UserInfo">
+        SELECT *
+        from s_user
+        where is_deleted = 0
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="studentId != null">
+            and id = #{studentId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from s_user
+        where is_deleted = 0
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="studentId != null">
+            and id = #{studentid}
+        </if>
+
+    </select>
+
+    <select id="getStudentList" resultType="com.weizujie.attendance.entity.User">
+        SELECT *
+        from s_user
+        where is_deleted = 0
+        and user_type = 2
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="studentId != null">
+            and id = #{studentId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+
+    <select id="getTeacherList" resultType="com.weizujie.attendance.entity.User">
+        SELECT *
+        from s_user
+        where is_deleted = 0
+        and user_type = 3
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="teacherId != null">
+            and id = #{teacherId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+</mapper>
