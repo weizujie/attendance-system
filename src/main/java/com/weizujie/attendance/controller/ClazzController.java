@@ -2,10 +2,11 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.entity.Clazz;
 import com.weizujie.attendance.service.ClazzService;
-import com.weizujie.attendance.service.StudentService;
-import com.weizujie.attendance.utils.R;
+import com.weizujie.attendance.service.UserService;
 import com.weizujie.attendance.utils.IdsData;
 import com.weizujie.attendance.utils.PageBean;
+import com.weizujie.attendance.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,11 @@ import java.util.Map;
 @RequestMapping("/clazz")
 public class ClazzController {
 
-    private final ClazzService clazzService;
-    private final StudentService studentService;
+    @Autowired
+    private ClazzService clazzService;
 
-    public ClazzController(ClazzService clazzService, StudentService studentService) {
-        this.clazzService = clazzService;
-        this.studentService = studentService;
-    }
+    @Autowired
+    private UserService userService;
 
     /**
      * 跳转专业页面
@@ -84,7 +83,7 @@ public class ClazzController {
         List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
         for (Integer id : ids) {
-            if (!studentService.isStudentByClazzId(id)) {
+            if (!userService.checkStudentInCourse(id)) {
                 return R.fail("无法删除，专业下存在学生");
             }
         }

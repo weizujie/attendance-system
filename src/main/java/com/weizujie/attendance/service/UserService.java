@@ -2,6 +2,7 @@ package com.weizujie.attendance.service;
 
 import com.weizujie.attendance.entity.User;
 import com.weizujie.attendance.utils.PageBean;
+import com.weizujie.attendance.utils.R;
 
 import java.util.List;
 import java.util.Map;
@@ -44,12 +45,15 @@ public interface UserService {
      */
     PageBean<User> getStudentPage(Map<String, Object> paramMap);
 
-
-
     /**
      * 分页展示教师列表
      * @param paramMap 查询参数
      * @return 教师列表
      */
     PageBean<User> getTeacherPage(Map<String, Object> paramMap);
+
+    int updateUser(User user);
+
+
+    boolean checkStudentInCourse(Integer id);
 }

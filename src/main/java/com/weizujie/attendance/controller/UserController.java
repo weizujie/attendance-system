@@ -69,6 +69,16 @@ public class UserController {
         }
     }
 
+    @PostMapping("/update")
+    public R<Boolean> updateUser(User user) {
+        int i = userService.updateUser(user);
+        if (i > 0) {
+            return R.success();
+        } else {
+            return R.fail();
+        }
+    }
+
     /**
      * 修改密码
      */

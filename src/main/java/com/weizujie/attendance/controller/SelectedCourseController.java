@@ -2,6 +2,7 @@ package com.weizujie.attendance.controller;
 
 import com.weizujie.attendance.constants.UserConstant;
 import com.weizujie.attendance.entity.SelectedCourse;
+import com.weizujie.attendance.entity.User;
 import com.weizujie.attendance.service.SelectedCourseService;
 import com.weizujie.attendance.utils.R;
 import com.weizujie.attendance.utils.PageBean;
@@ -51,10 +52,10 @@ public class SelectedCourseController {
             paramMap.put("courseId", courseid);
         }
         //判断是老师还是学生权限
-        Student student = (Student) session.getAttribute(UserConstant.STUDENT);
-        if (!StringUtils.isEmpty(student)) {
+        User user = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        if (!UserConstant.STUDENT_CODE.equals(user.getUserType())) {
             //是学生权限，只能查询自己的信息
-            paramMap.put("studentid", student.getId());
+            paramMap.put("studentId", user.getId());
         }
         PageBean<SelectedCourse> pageBean = selectedCourseService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {

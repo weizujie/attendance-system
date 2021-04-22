@@ -79,6 +79,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUser(User user) {
+        return userMapper.updateById(user);
+    }
+
+    @Override
+    public boolean checkStudentInCourse(Integer id) {
+        return false;
+    }
+
+    @Override
     public int deleteUser(List<Integer> ids) {
         return userMapper.deleteBatchIds(ids);
     }
