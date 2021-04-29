@@ -13,7 +13,7 @@
     <select id="queryList" resultMap="AttendanceInfo">
         SELECT *
         from s_attendance
-        where id_deleted = 0
+        where is_deleted = 0
         <if test="courseid != null">
             and course_id = #{courseid}
         </if>
